@@ -1,9 +1,9 @@
-name: Deploy Master
+name: Deploy Dev
 
 on:
     push:
         branches:
-            - master
+            - dev
 
 jobs:
   build:
@@ -17,7 +17,7 @@ jobs:
         SSH_AUTH_SOCK: /tmp/ssh_agent.sock
       run: |
           mkdir -p ~/.ssh
-          ssh-keyscan 167.172.61.88 >> ~/.ssh/known_hosts
+          ssh-keyscan 167.71.131.205 >> ~/.ssh/known_hosts
           ssh-agent -a $SSH_AUTH_SOCK > /dev/null
           ssh-add - <<< "${{ secrets.SSH_PRIVATE_KEY }}"
     - name: Push to the production server
@@ -27,4 +27,4 @@ jobs:
           git fetch --unshallow origin
           git config --global user.name 'Github Action'
           git config --global user.email 'github@action.com'
-          git push root@167.172.61.88:/var/www/html/repo master
+          git push root@167.71.131.205:/var/www/html/repo master
