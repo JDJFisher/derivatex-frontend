@@ -1,4 +1,4 @@
-name: CI
+name: Deploy Master
 
 on: [push]
 
@@ -14,9 +14,9 @@ jobs:
         SSH_AUTH_SOCK: /tmp/ssh_agent.sock
       run: |
           mkdir -p ~/.ssh
-          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          ssh-keyscan 167.172.61.88 >> ~/.ssh/known_hosts
           ssh-agent -a $SSH_AUTH_SOCK > /dev/null
-          ssh-add - <<< "$"
+          ssh-add - <<< "$SSH_PRIVATE_KEY"
     - name: Run a one-line script
       env:
         SSH_AUTH_SOCK: /tmp/ssh_agent.sock
