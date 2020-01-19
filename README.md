@@ -1,5 +1,7 @@
 # CS261 Coursework Frontend
 
+![](https://github.com/lirwin3007/cs261-coursework-frontend/workflows/Deploy%20Master/badge.svg)
+
 ## Project setup
 ```
 npm install
@@ -24,6 +26,3 @@ npm run test:unit
 ```
 npm run lint
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
