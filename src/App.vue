@@ -1,8 +1,7 @@
 <template>
   <div id="app">
     <div id="nav">
-      Hello World!
-      I'm on dev!
+      Hello World!Although I want to be on master now...
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
     </div>
