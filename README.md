@@ -1,4 +1,4 @@
-# cs261-coursework-frontend
+# CS261 Coursework Frontend
 
 ## Project setup
 ```
