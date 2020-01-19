@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
     - name: Setup SSH Keys and known_hosts
       env:
         SSH_AUTH_SOCK: /tmp/ssh_agent.sock
@@ -16,9 +16,11 @@ jobs:
           mkdir -p ~/.ssh
           ssh-keyscan 167.172.61.88 >> ~/.ssh/known_hosts
           ssh-agent -a $SSH_AUTH_SOCK > /dev/null
-          echo "${{ secrets.SSH_PRIVATE_KEY }}"
           ssh-add - <<< "${{ secrets.SSH_PRIVATE_KEY }}"
     - name: Run a one-line script
       env:
         SSH_AUTH_SOCK: /tmp/ssh_agent.sock
-      run: git push root@167.172.61.88:/var/www/html/repo master
+      run: |
+          git config --global user.name 'Github Action'
+          git config --global user.email 'github@action.com'
+          git push root@167.172.61.88:/var/www/html/repo master
