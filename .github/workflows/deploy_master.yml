@@ -16,8 +16,8 @@ jobs:
           mkdir -p ~/.ssh
           ssh-keyscan 167.172.61.88 >> ~/.ssh/known_hosts
           ssh-agent -a $SSH_AUTH_SOCK > /dev/null
-          echo "$"
-          ssh-add - <<< "$"
+          echo "${{ secrets.SSH_PRIVATE_KEY }}"
+          ssh-add - <<< "${{ secrets.SSH_PRIVATE_KEY }}"
     - name: Run a one-line script
       env:
         SSH_AUTH_SOCK: /tmp/ssh_agent.sock
