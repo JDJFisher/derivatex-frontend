@@ -1,7 +1,7 @@
 <template>
   <div class="p-4">
     <p class="subtitle is-5 pt-4 has-text-accent">
-      derivatives Title Here
+      Error detection Title Here
     </p>
     <div class="content">
       Derivative info

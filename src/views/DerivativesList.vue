@@ -1,6 +1,10 @@
 <template>
   <div>
-    <b-table :data="data" :columns="columns" :selected.sync="selected">
+    <b-table
+      :data="data"
+      :columns="columns"
+      :selected.sync="selected"
+      @select="$store.dispatch('set_right_sidebar_show', true)">
     </b-table>
   </div>
 </template>
@@ -48,7 +52,7 @@ export default {
 
     return {
       data,
-      selected: data[1],
+      selected: null,
       columns: [
         {
           field: "id",

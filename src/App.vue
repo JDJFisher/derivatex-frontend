@@ -1,7 +1,10 @@
 <template>
   <div id="app" class="flex flex-col h-screen">
+    <transition name="fade">
+      <Loader v-if="showLoader" @finish="showLoader = false"/>
+    </transition>
     <Header />
-    <div class="flex-grow flex flex-row">
+    <div class="flex-grow flex flex-row" style="background-color: #F0F0F0">
       <LeftSidebar class="relative z-20" />
       <PageContent class="relative z-10" />
     </div>
@@ -10,14 +13,21 @@
 
 <script>
 import Header from "@/components/ui/Header";
+import Loader from "@/components/ui/Loader";
 import PageContent from "@/components/ui/PageContent";
 import LeftSidebar from "@/components/ui/LeftSidebar";
 
 export default {
   components: {
     Header,
+    Loader,
     PageContent,
     LeftSidebar
+  },
+  data() {
+    return {
+      showLoader: true
+    };
   }
 };
 </script>
