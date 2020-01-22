@@ -1,33 +1,110 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      Hello World!
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+  <div id="app" class="flex flex-col h-screen">
+    <Header />
+    <div class="flex-grow flex flex-row">
+      <LeftSidebar class="relative z-20" />
+      <PageContent class="relative z-10" />
     </div>
-    <router-view />
   </div>
 </template>
 
+<script>
+import Header from "@/components/ui/Header";
+import PageContent from "@/components/ui/PageContent";
+import LeftSidebar from "@/components/ui/LeftSidebar";
+
+export default {
+  components: {
+    Header,
+    PageContent,
+    LeftSidebar
+  }
+};
+</script>
+
 <style>
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+html,
+body {
+  overflow: hidden !important;
 }
+</style>
 
-#nav {
-  padding: 30px;
-}
+<style lang="scss">
+// Import Tailwind
+@import url("https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css");
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
+// Import work sans font
+@import url("https://fonts.googleapis.com/css?family=Work+Sans&display=swap");
 
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
+// Import Bulma's core
+@import "~bulma/sass/utilities/_all";
+
+// Set your colors
+$primary: #3a4b62;
+$primary-invert: findColorInvert($primary);
+$primary-dark: #2f3c4f;
+$primary-dark-invert: findColorInvert($primary-dark);
+$accent: #2e9cea;
+$accent-invert: findColorInvert($accent);
+
+// Set menu colours
+$menu-item-color: $white;
+$menu-item-hover-color: $white;
+$menu-label-color: $accent;
+$menu-item-hover-background-color: #3a4b62;
+
+// Set font
+$family-primary: "Work Sans";
+
+// Setup $colors to use as bulma classes
+$colors: (
+  "white": (
+    $white,
+    $black
+  ),
+  "black": (
+    $black,
+    $white
+  ),
+  "light": (
+    $light,
+    $light-invert
+  ),
+  "dark": (
+    $dark,
+    $dark-invert
+  ),
+  "primary": (
+    $primary,
+    $primary-invert
+  ),
+  "primary-dark": (
+    $primary-dark,
+    $primary-dark-invert
+  ),
+  "accent": (
+    $accent,
+    $accent-invert
+  ),
+  "info": (
+    $info,
+    $info-invert
+  ),
+  "success": (
+    $success,
+    $success-invert
+  ),
+  "warning": (
+    $warning,
+    $warning-invert
+  ),
+  "danger": (
+    $danger,
+    $danger-invert
+  )
+);
+
+// Import Bulma and Buefy styles
+@import "~bulma";
+@import "~buefy/src/scss/buefy";
 </style>
