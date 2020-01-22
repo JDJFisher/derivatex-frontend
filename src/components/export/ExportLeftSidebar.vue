@@ -3,7 +3,7 @@
     <b-menu-list label="Filters">
       <b-menu-item class="text-white" :expanded="true">
         <template slot="label">
-          Derivative Filter 1
+          Export Filter 1
           <ChevronRight class="float-right" /><br />
           <div
             class="pl-4 w-11/12 truncate ... italic text-sm has-text-grey-light"
