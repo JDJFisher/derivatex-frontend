@@ -4,7 +4,8 @@
       :data="data"
       :columns="columns"
       :selected.sync="selected"
-      @select="$store.dispatch('set_right_sidebar_show', true)">
+      @select="$store.dispatch('set_right_sidebar_show', true)"
+    >
     </b-table>
   </div>
 </template>

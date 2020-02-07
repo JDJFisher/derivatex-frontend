@@ -1,7 +1,7 @@
 <template>
   <div id="app" class="flex flex-col h-screen">
     <transition name="fade">
-      <Loader v-if="showLoader" @finish="showLoader = false"/>
+      <Loader v-if="showLoader" @finish="showLoader = false" />
     </transition>
     <Header />
     <div class="flex-grow flex flex-row" style="background-color: #F0F0F0">
