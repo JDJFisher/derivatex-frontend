@@ -7,7 +7,7 @@
         </p>
       </div>
       <div class="level-item italic text-sm has-text-grey">
-        {{ this.$store.getters['filterCount'] }} Filters Applied
+        {{ this.$store.getters["filterCount"] }} Filters Applied
       </div>
     </div>
   </nav>

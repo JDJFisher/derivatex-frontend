@@ -74,11 +74,21 @@ export default new Vuex.Store({
     },
     filterCount: state => {
       var result = 0;
-      if (state.filters.buyingParty.length > 0) { result += 1; }
-      if (state.filters.sellingParty.length > 0) { result += 1; }
-      if (state.filters.asset.length > 0) { result += 1; }
-      if (state.filters.strikePrice.max != null) { result += 1; }
-      if (state.filters.notionalValue.max != null) { result += 1; }
+      if (state.filters.buyingParty.length > 0) {
+        result += 1;
+      }
+      if (state.filters.sellingParty.length > 0) {
+        result += 1;
+      }
+      if (state.filters.asset.length > 0) {
+        result += 1;
+      }
+      if (state.filters.strikePrice.max != null) {
+        result += 1;
+      }
+      if (state.filters.notionalValue.max != null) {
+        result += 1;
+      }
       return result;
     }
   },
