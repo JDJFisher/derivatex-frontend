@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import VueNumeric from 'vue-numeric'
+import VueNumeric from "vue-numeric";
 import Multiselect from "vue-multiselect";
 import Check from "vue-material-design-icons/Check.vue";
 import TrashCan from "vue-material-design-icons/TrashCan.vue";
@@ -64,11 +64,11 @@ export default {
     type: String
   },
   mounted() {
-    if (this.type == 'multiselect') {
+    if (this.type == "multiselect") {
       this.newValue = this.initialValue;
     } else {
-      this.newMin = this.initialValue.min;
-      this.newMax = this.initialValue.max;
+      this.newMin = this.initialValue.min || 0;
+      this.newMax = this.initialValue.max || 0;
     }
   },
   data() {
@@ -83,7 +83,10 @@ export default {
       if (this.newMax == 0) {
         return this.remove();
       }
-      var newVal = this.type == 'multiselect' ? this.newValue : {min: this.newMin, max: this.newMax};
+      var newVal =
+        this.type == "multiselect"
+          ? this.newValue
+          : { min: this.newMin, max: this.newMax };
       this.$store.dispatch(this.mutation, newVal);
       this.$emit("close");
     },
@@ -91,7 +94,7 @@ export default {
       this.newVal = [];
       this.newMin = null;
       this.newMax = null;
-      var newVal = this.type == 'multiselect' ? [] : {min: null, max: null};
+      var newVal = this.type == "multiselect" ? [] : { min: null, max: null };
       this.$store.dispatch(this.mutation, newVal);
       this.$emit("close");
     }

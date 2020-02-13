@@ -13,6 +13,10 @@ export default new Vuex.Store({
       asset: [],
       strikePrice: { min: null, max: null },
       notionalValue: { in: null, max: null }
+    },
+    orderBy: {
+      field: "date_of_trade",
+      order: "descending"
     }
   },
   mutations: {
@@ -24,6 +28,9 @@ export default new Vuex.Store({
     },
     set_filter(state, payload) {
       state.filters[payload.filter] = payload.value;
+    },
+    set_order_by(state, orderBy) {
+      state.orderBy = orderBy;
     }
   },
   actions: {
@@ -47,6 +54,9 @@ export default new Vuex.Store({
     },
     set_notional_value_filter({ commit }, value) {
       commit("set_filter", { filter: "notionalValue", value: value });
+    },
+    set_order_by({ commit }, value) {
+      commit("set_order_by", value);
     }
   },
   getters: {
@@ -58,6 +68,18 @@ export default new Vuex.Store({
     },
     filters: state => {
       return state.filters;
+    },
+    orderBy: state => {
+      return state.orderBy;
+    },
+    filterCount: state => {
+      var result = 0;
+      if (state.filters.buyingParty.length > 0) { result += 1; }
+      if (state.filters.sellingParty.length > 0) { result += 1; }
+      if (state.filters.asset.length > 0) { result += 1; }
+      if (state.filters.strikePrice.max != null) { result += 1; }
+      if (state.filters.notionalValue.max != null) { result += 1; }
+      return result;
     }
   },
   modules: {}

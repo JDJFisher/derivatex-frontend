@@ -97,25 +97,31 @@ export default {
       if (this.filters.buyingParty.length == 0) {
         return "No filter";
       }
-      return this.filters.buyingParty.reduce((acc, x) => {
-        return acc + x + ", ";
-      }, "").slice(0, -2);
+      return this.filters.buyingParty
+        .reduce((acc, x) => {
+          return acc + x + ", ";
+        }, "")
+        .slice(0, -2);
     },
     sellingPartyString() {
       if (this.filters.sellingParty.length == 0) {
         return "No filter";
       }
-      return this.filters.sellingParty.reduce((acc, x) => {
-        return acc + x + ", ";
-      }, "").slice(0, -2);
+      return this.filters.sellingParty
+        .reduce((acc, x) => {
+          return acc + x + ", ";
+        }, "")
+        .slice(0, -2);
     },
     assetString() {
       if (this.filters.asset.length == 0) {
         return "No filter";
       }
-      return this.filters.asset.reduce((acc, x) => {
-        return acc + x + ", ";
-      }, "").slice(0, -2);
+      return this.filters.asset
+        .reduce((acc, x) => {
+          return acc + x + ", ";
+        }, "")
+        .slice(0, -2);
     },
     strikePriceString() {
       if (this.filters.strikePrice.min == null) {
