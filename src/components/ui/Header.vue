@@ -53,7 +53,7 @@
           class="mx-6 w-full flex flex-row"
           :class="{ 'has-text-grey-light': page != 'error_detection' }"
         >
-          ERROR DETECTION
+          LEARNED BEHAVIOUR
           <chevron-down />
         </div>
       </b-navbar-item>
