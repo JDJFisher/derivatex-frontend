@@ -13,7 +13,7 @@ Vue.filter('formatDate', function (value) {
   return Moment(value).format("Do MMM YYYY");
 })
 
-Vue.filter('formatCurrency', function (value, currency) {
+Vue.filter('formatCurrency', function (value, symbol, currency) {
   return value + " " + currency;
 })
 
