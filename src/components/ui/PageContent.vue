@@ -4,7 +4,7 @@
     <div class="columns h-full">
       <div
         id="main-content"
-        class="column is-10"
+        class="column overflow-auto"
         :class="rightSidebarShow ? 'is-10' : 'is-12'"
       >
         <transition name="header-fade" mode="out-in">

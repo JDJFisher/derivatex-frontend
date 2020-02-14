@@ -28,10 +28,6 @@ export default {
     return {
       showLoader: true
     };
-  },
-  mounted() {
-    /* eslint no-console: ["error", { allow: ["log", "error"] }] */
-    console.log(process.env.VUE_APP_API_BASE);
   }
 };
 </script>

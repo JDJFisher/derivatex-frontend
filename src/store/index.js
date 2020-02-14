@@ -7,6 +7,7 @@ export default new Vuex.Store({
   state: {
     page: "derivatives",
     rightSidebarShow: false,
+    rightSidebarData: {},
     filters: {
       buyingParty: [],
       sellingParty: [],
@@ -31,6 +32,9 @@ export default new Vuex.Store({
     },
     set_order_by(state, orderBy) {
       state.orderBy = orderBy;
+    },
+    set_right_sidebar_data(state, rightSidebarData) {
+      state.rightSidebarData = rightSidebarData;
     }
   },
   actions: {
@@ -57,6 +61,9 @@ export default new Vuex.Store({
     },
     set_order_by({ commit }, value) {
       commit("set_order_by", value);
+    },
+    set_right_sidebar_data({ commit }, value) {
+      commit("set_right_sidebar_data", value);
     }
   },
   getters: {
@@ -65,6 +72,9 @@ export default new Vuex.Store({
     },
     rightSidebarShow: state => {
       return state.rightSidebarShow;
+    },
+    rightSidebarData: state => {
+      return state.rightSidebarData;
     },
     filters: state => {
       return state.filters;
