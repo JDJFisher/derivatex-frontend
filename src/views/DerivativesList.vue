@@ -218,6 +218,17 @@ export default {
           });
         });
         this.paginationData.total = response.data.page_count;
+      }).catch((error) => {
+        this.$buefy.snackbar.open({
+            message: "Failed to fetch Derivatives.<br>" + error,
+            type: 'is-warning',
+            position: 'is-top',
+            actionText: 'Retry',
+            indefinite: true,
+            onAction: () => {
+                this.getDerivatives(this.paginationData.currentPage);
+            }
+        })
       });
     }
   }
