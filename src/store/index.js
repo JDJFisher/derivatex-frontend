@@ -18,7 +18,8 @@ export default new Vuex.Store({
     orderBy: {
       field: "date_of_trade",
       order: "descending"
-    }
+    },
+    report: null
   },
   mutations: {
     set_page(state, page) {
@@ -35,6 +36,9 @@ export default new Vuex.Store({
     },
     set_right_sidebar_data(state, rightSidebarData) {
       state.rightSidebarData = rightSidebarData;
+    },
+    set_report(state, report) {
+      state.report = report;
     }
   },
   actions: {
@@ -64,6 +68,9 @@ export default new Vuex.Store({
     },
     set_right_sidebar_data({ commit }, value) {
       commit("set_right_sidebar_data", value);
+    },
+    set_report({ commit }, value) {
+      commit("set_report", value);
     }
   },
   getters: {
@@ -100,6 +107,9 @@ export default new Vuex.Store({
         result += 1;
       }
       return result;
+    },
+    report: state => {
+      return state.report;
     }
   },
   modules: {}

@@ -9,13 +9,13 @@ import vuetify from "./plugins/vuetify";
 Vue.config.productionTip = false;
 Vue.use(Buefy);
 
-Vue.filter('formatDate', function (value) {
+Vue.filter("formatDate", function(value) {
   return Moment(value).format("Do MMM YYYY");
-})
+});
 
-Vue.filter('formatCurrency', function (value, symbol, currency) {
+Vue.filter("formatCurrency", function(value, symbol, currency) {
   return value + " " + currency;
-})
+});
 
 export const eventBus = new Vue();
 

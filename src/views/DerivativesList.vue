@@ -63,26 +63,23 @@
     >
     </b-table>
     <b-pagination
-            :total="paginationData.total"
-            :current.sync="paginationData.currentPage"
-            :simple="false"
-            :per-page="1"
-            style="margin-top: 1rem">
+      :total="paginationData.total"
+      :current.sync="paginationData.currentPage"
+      :simple="false"
+      :per-page="1"
+      style="margin-top: 1rem"
+    >
+      <b-pagination-button
+        slot="previous"
+        slot-scope="props"
+        :page="props.page"
+      >
+        Previous
+      </b-pagination-button>
 
-            <b-pagination-button
-                slot="previous"
-                slot-scope="props"
-                :page="props.page">
-                Previous
-            </b-pagination-button>
-
-            <b-pagination-button
-                slot="next"
-                slot-scope="props"
-                :page="props.page">
-                Next
-            </b-pagination-button>
-
+      <b-pagination-button slot="next" slot-scope="props" :page="props.page">
+        Next
+      </b-pagination-button>
     </b-pagination>
   </div>
 </template>
@@ -93,7 +90,7 @@ import { mapGetters } from "vuex";
 import ArrowUp from "vue-material-design-icons/ArrowUp.vue";
 import ArrowDown from "vue-material-design-icons/ArrowDown.vue";
 
-const axios = require('axios');
+const axios = require("axios");
 
 export default {
   components: {
@@ -119,11 +116,11 @@ export default {
         },
         {
           field: "buying_party",
-          label: "Buying Party",
+          label: "Buying Party"
         },
         {
           field: "quantity",
-          label: "Quantity",
+          label: "Quantity"
         },
         {
           field: "asset",
@@ -157,7 +154,7 @@ export default {
     this.getDerivatives(1);
   },
   watch: {
-    'paginationData.currentPage': function() {
+    "paginationData.currentPage": function() {
       this.getDerivatives(this.paginationData.currentPage);
     }
   },
@@ -173,15 +170,17 @@ export default {
         underlying_price: "───",
         notional_value: "────",
         date_of_trade: "────────",
-        maturity_date: "────────",
+        maturity_date: "────────"
       };
-      return Array(15).fill().map(() => dummyDerivative);
+      return Array(15)
+        .fill()
+        .map(() => dummyDerivative);
     }
   },
   methods: {
     tableRowSelect(payload) {
-      this.$store.dispatch('set_right_sidebar_show', true);
-      this.$store.dispatch('set_right_sidebar_data', payload);
+      this.$store.dispatch("set_right_sidebar_show", true);
+      this.$store.dispatch("set_right_sidebar_data", payload);
     },
     changeOrderByField() {
       this.$store.dispatch("set_order_by", {
@@ -199,37 +198,66 @@ export default {
       this.derivatives = [];
       this.loading = true;
       var derivativesLeftToLoad = 0;
-      axios.get(process.env.VUE_APP_API_BASE + '/derivative-management/index-derivatives?page_number=' + (page_number - 1)).then((response) => {
-        derivativesLeftToLoad = response.data.derivatives.length;
-        response.data.derivatives.forEach( deriativeId => {
-          axios.get(process.env.VUE_APP_API_BASE + '/derivative-management/get-derivative/' + deriativeId).then((response) => {
-            var newDerivative = response.data.derivative;
-            newDerivative.maturity_date = this.$options.filters.formatDate(newDerivative.maturity_date);
-            newDerivative.date_of_trade = this.$options.filters.formatDate(newDerivative.date_of_trade);
-            newDerivative.strike_price = this.$options.filters.formatCurrency(newDerivative.strike_price, newDerivative.currency_symbol, newDerivative.currency_code);
-            newDerivative.underlying_price = this.$options.filters.formatCurrency(newDerivative.underlying_price, newDerivative.currency_symbol, newDerivative.currency_code);
-            newDerivative.notional_value = this.$options.filters.formatCurrency(newDerivative.notional_value, newDerivative.currency_symbol, newDerivative.currency_code);
-            this.derivatives.push(newDerivative);
-            derivativesLeftToLoad -= 1;
-            if (derivativesLeftToLoad == 0) {
-              this.loading = false;
-              this.derivatives.sort( (a, b) => a.id - b.id );
+      axios
+        .get(
+          process.env.VUE_APP_API_BASE +
+            "/derivative-management/index-derivatives?page_number=" +
+            (page_number - 1)
+        )
+        .then(response => {
+          derivativesLeftToLoad = response.data.derivatives.length;
+          response.data.derivatives.forEach(deriativeId => {
+            axios
+              .get(
+                process.env.VUE_APP_API_BASE +
+                  "/derivative-management/get-derivative/" +
+                  deriativeId
+              )
+              .then(response => {
+                var newDerivative = response.data.derivative;
+                newDerivative.maturity_date = this.$options.filters.formatDate(
+                  newDerivative.maturity_date
+                );
+                newDerivative.date_of_trade = this.$options.filters.formatDate(
+                  newDerivative.date_of_trade
+                );
+                newDerivative.strike_price = this.$options.filters.formatCurrency(
+                  newDerivative.strike_price,
+                  newDerivative.currency_symbol,
+                  newDerivative.currency_code
+                );
+                newDerivative.underlying_price = this.$options.filters.formatCurrency(
+                  newDerivative.underlying_price,
+                  newDerivative.currency_symbol,
+                  newDerivative.currency_code
+                );
+                newDerivative.notional_value = this.$options.filters.formatCurrency(
+                  newDerivative.notional_value,
+                  newDerivative.currency_symbol,
+                  newDerivative.currency_code
+                );
+                this.derivatives.push(newDerivative);
+                derivativesLeftToLoad -= 1;
+                if (derivativesLeftToLoad == 0) {
+                  this.loading = false;
+                  this.derivatives.sort((a, b) => a.id - b.id);
+                }
+              });
+          });
+          this.paginationData.total = response.data.page_count;
+        })
+        .catch(error => {
+          this.$buefy.snackbar.open({
+            message: "Failed to fetch Derivatives.<br>" + error,
+            type: "is-warning",
+            position: "is-top",
+            actionText: "Retry",
+            indefinite: false,
+            onAction: () => {
+              this.getDerivatives(this.paginationData.currentPage);
             }
           });
         });
-        this.paginationData.total = response.data.page_count;
-      }).catch((error) => {
-        this.$buefy.snackbar.open({
-            message: "Failed to fetch Derivatives.<br>" + error,
-            type: 'is-warning',
-            position: 'is-top',
-            actionText: 'Retry',
-            indefinite: true,
-            onAction: () => {
-                this.getDerivatives(this.paginationData.currentPage);
-            }
-        })
-      });
     }
   }
 };
