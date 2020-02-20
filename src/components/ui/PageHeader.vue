@@ -64,7 +64,8 @@ export default {
 .header-fade-leave-active {
   transition: all 0.3s ease;
 }
-.header-fade-enter, .header-fade-leave-to {
+.header-fade-enter,
+.header-fade-leave-to {
   opacity: 0;
 }
 </style>

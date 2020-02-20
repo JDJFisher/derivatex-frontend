@@ -52,7 +52,7 @@ export default {
   },
   watch: {
     page: function() {
-      this.$store.dispatch('set_right_sidebar_show', false);
+      this.$store.dispatch("set_right_sidebar_show", false);
     }
   },
   computed: {
@@ -68,7 +68,8 @@ export default {
 .right-slide-fade-leave-active {
   transition: all 0.3s ease;
 }
-.right-slide-fade-enter, .right-slide-fade-leave-to {
+.right-slide-fade-enter,
+.right-slide-fade-leave-to {
   transform: translateX(200px);
   opacity: 0;
 }

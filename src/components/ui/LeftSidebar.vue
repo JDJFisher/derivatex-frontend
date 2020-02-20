@@ -63,7 +63,8 @@ export default {
 .slide-fade-leave-active {
   transition: all 0.3s ease;
 }
-.slide-fade-enter, .slide-fade-leave-to {
+.slide-fade-enter,
+.slide-fade-leave-to {
   transform: translateX(-200px);
   opacity: 0;
 }

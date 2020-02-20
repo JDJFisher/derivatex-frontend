@@ -2,12 +2,16 @@
   <div class="w-full h-full relative">
     <PageHeader class="relative z-10" />
     <div class="columns h-full">
-      <div id="main-content" class="column is-10" :class="rightSidebarShow ? 'is-10' : 'is-12'">
+      <div
+        id="main-content"
+        class="column overflow-auto"
+        :class="rightSidebarShow ? 'is-10' : 'is-12'"
+      >
         <transition name="header-fade" mode="out-in">
-          <DerivativesList class="m-8" v-if="page=='derivatives'" />
-          <ErrorDetection class="m-8" v-if="page=='error_detection'" />
-          <Export class="m-8" v-if="page=='export'" />
-          <ReportsList class="m-8" v-if="page=='reports'" />
+          <DerivativesList class="m-8" v-if="page == 'derivatives'" />
+          <ErrorDetection class="m-8" v-if="page == 'error_detection'" />
+          <Export class="m-8" v-if="page == 'export'" />
+          <ReportsList class="m-8" v-if="page == 'reports'" />
         </transition>
       </div>
       <div class="column is-2">
@@ -43,7 +47,7 @@ export default {
 </script>
 
 <style>
-  #main-content {
-    transition: width 0.3s;
-  }
+#main-content {
+  transition: width 0.3s;
+}
 </style>
