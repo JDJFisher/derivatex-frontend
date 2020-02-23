@@ -14,7 +14,15 @@ Vue.filter("formatDate", function(value) {
 });
 
 Vue.filter("formatCurrency", function(value, symbol, currency) {
-  return value + " " + currency;
+  if (symbol != "?") {
+    if (symbol.length > 1) {
+      return symbol + " " + value.toFixed(2);
+    } else {
+      return symbol + value.toFixed(2);
+    }
+  } else {
+    return value.toFixed(2) + " " + currency;
+  }
 });
 
 export const eventBus = new Vue();

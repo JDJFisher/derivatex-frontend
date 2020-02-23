@@ -221,20 +221,20 @@ export default {
                 newDerivative.date_of_trade = this.$options.filters.formatDate(
                   newDerivative.date_of_trade
                 );
-                newDerivative.strike_price = this.$options.filters.formatCurrency(
+                /* newDerivative.strike_price = this.$options.filters.formatCurrency(
                   newDerivative.strike_price,
                   newDerivative.currency_symbol,
                   newDerivative.currency_code
-                );
+                );*/
                 newDerivative.underlying_price = this.$options.filters.formatCurrency(
                   newDerivative.underlying_price,
-                  newDerivative.currency_symbol,
-                  newDerivative.currency_code
+                  newDerivative.underlying_curr_symbol,
+                  newDerivative.underlying_curr_code
                 );
                 newDerivative.notional_value = this.$options.filters.formatCurrency(
                   newDerivative.notional_value,
-                  newDerivative.currency_symbol,
-                  newDerivative.currency_code
+                  newDerivative.notional_curr_symbol,
+                  newDerivative.notional_curr_code
                 );
                 this.derivatives.push(newDerivative);
                 derivativesLeftToLoad -= 1;
