@@ -13,6 +13,14 @@ Vue.filter("formatDate", function(value) {
   return Moment(value).format("Do MMM YYYY");
 });
 
+Vue.filter("formatDateShort", function(value) {
+  return Moment(value).format("DD/MM/YYYY");
+});
+
+Vue.filter("formatDateJson", function(value) {
+  return Moment(value).format("YYYY-MM-DD");
+});
+
 Vue.filter("formatCurrency", function(value, symbol, currency) {
   if (symbol != "?") {
     if (symbol.length > 1) {

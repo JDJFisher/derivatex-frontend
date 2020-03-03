@@ -214,6 +214,7 @@ export default {
                   deriativeId
               )
               .then(response => {
+              /* eslint no-console: ["error", { allow: ["log"] }] */
                 var newDerivative = response.data.derivative;
                 newDerivative.maturity_date = this.$options.filters.formatDate(
                   newDerivative.maturity_date
@@ -221,11 +222,11 @@ export default {
                 newDerivative.date_of_trade = this.$options.filters.formatDate(
                   newDerivative.date_of_trade
                 );
-                /* newDerivative.strike_price = this.$options.filters.formatCurrency(
+                newDerivative.strike_price = this.$options.filters.formatCurrency(
                   newDerivative.strike_price,
-                  newDerivative.currency_symbol,
-                  newDerivative.currency_code
-                );*/
+                  newDerivative.underlying_curr_symbol,
+                  newDerivative.underlying_curr_code
+                );
                 newDerivative.underlying_price = this.$options.filters.formatCurrency(
                   newDerivative.underlying_price,
                   newDerivative.underlying_curr_symbol,

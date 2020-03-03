@@ -1,41 +1,89 @@
 <template>
   <div>
-    <p class="subtitle is-5 pt-4 has-text-accent">
-      Date here
-    </p>
-    <div class="flex flex-row flex-wrap">
-      <ReportThumbnail
-        v-for="report in reports"
-        :key="report.report_id"
-        :report="report"
-        class="w-1/6 m-2"
-        @view="viewReport(report)"
-      />
+    <div v-for="reportDate in allDates" :key="reportDate">
+      <p class="subtitle is-5 has-text-accent">
+        {{ reportDate | formatDate }}
+      </p>
+      <div class="flex flex-row flex-wrap">
+        <ReportThumbnail
+          v-for="report in reports[reportDate]"
+          :key="report.report_id"
+          :report="report"
+          class="w-1/6 m-2 mt-0 mb-8"
+          @view="viewReport(report)"
+        />
+        <ReportThumbnailPlaceholder
+            v-if="pendingReports.includes(reportDate) || !reports[reportDate]"
+            :date="reportDate"
+            :other-reports="reports[reportDate]"
+            :no-derivatives="!reports[reportDate] && !pendingReports.includes(reportDate)"
+            @refresh="refresh"
+            class="w-1/6 m-2 mt-0 mb-8"
+        />
+      </div>
     </div>
+    {{ pendingReports }}
+    {{ allDates }}
   </div>
 </template>
 
 <script>
+const axios = require("axios");
+import { mapGetters } from "vuex";
+
 import ReportModal from "@/components/reports/ReportModal";
 import ReportThumbnail from "@/components/reports/ReportThumbnail";
+import ReportThumbnailPlaceholder from "@/components/reports/ReportThumbnailPlaceholder";
 
-const axios = require("axios");
 
 export default {
   components: {
-    ReportThumbnail
+    ReportThumbnail,
+    ReportThumbnailPlaceholder
   },
   data() {
     return {
       reports: [],
       loading: false,
-      modalReport: null
+      modalReport: null,
+      pendingReports: []
     };
   },
+  computed: {
+    ...mapGetters(["filters"]),
+    allDates() {
+        var result = [];
+        var date = this.filters.dateFrom.clone();
+        while (date <= this.filters.dateTo) {
+            result.push(date.clone().format('YYYY-MM-DD'));
+            date = date.add(1, 'day');
+        }
+        return result;
+    }
+  },
   mounted() {
-    this.getReports("2020-01-01", "2019-01-01");
+    this.indexReports();
+    this.indexPendingReports();
   },
   methods: {
+    indexPendingReports() {
+        axios
+          .get(
+            `${process.env.VUE_APP_API_BASE}/reporting/index-pending-reports`
+          )
+          .then(response => {
+            this.pendingReports = response.data.dates;
+          });
+    },
+    refresh() {
+        this.indexReports();
+        this.indexPendingReports();
+    },
+    indexReports() {
+      var dateTo = this.$options.filters.formatDateJson(this.filters.dateTo);
+      var dateFrom = this.$options.filters.formatDateJson(this.filters.dateFrom);
+      this.getReports(dateFrom, dateTo);
+    },
     viewReport(report) {
       this.$store.dispatch('set_report', report);
       this.$buefy.modal.open({
@@ -48,28 +96,23 @@ export default {
     getReports(dateFrom, dateTo) {
       this.reports = [];
       this.loading = true;
-      var reportsLeftToLoad = 0;
       axios
         .get(
-          `${process.env.VUE_APP_API_BASE}/report-management/index-reports/${dateFrom}/${dateTo}`
+          `${process.env.VUE_APP_API_BASE}/reporting/index-reports?from_date=${dateFrom}&to_date=${dateTo}`
         )
         .then(response => {
-          reportsLeftToLoad = response.data.report_ids.length;
-          response.data.report_ids.forEach(reportId => {
-            axios
-              .get(
-                `${process.env.VUE_APP_API_BASE}/report-management/get-report/${reportId}`
-              )
-              .then(response => {
-                var newReport = response.data;
-                this.reports.push(newReport);
-                reportsLeftToLoad -= 1;
-                if (reportsLeftToLoad == 0) {
-                  this.loading = false;
-                  this.reports.sort((a, b) => a.report_id - b.report_id);
-                }
-              });
+          this.reports = {};
+          response.data.reports.forEach(report => {
+            report.status = "REDACTED";
+            if (this.reports[report.target_date]) {
+              this.reports[report.target_date].push(report)
+            } else {
+              this.reports[report.target_date] = [report]
+            }
           });
+          Object.keys(this.reports).forEach(reportDate => {
+            this.reports[reportDate][this.reports[reportDate].length - 1].status = "ACTIVE"
+          })
         })
         .catch(error => {
           this.$buefy.snackbar.open({

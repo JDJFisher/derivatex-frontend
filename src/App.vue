@@ -3,9 +3,9 @@
     <transition name="fade">
       <Loader v-if="showLoader" @finish="showLoader = false" />
     </transition>
-    <Header />
-    <div class="flex-grow flex flex-row" style="background-color: #F0F0F0">
-      <LeftSidebar class="relative z-20" />
+    <Header style="position: fixed;" class="w-full" />
+    <div class="flex-grow flex flex-row" style="background-color: #F0F0F0; margin-top: 4rem;">
+      <LeftSidebar class="relative z-20" style="position: fixed;" />
       <PageContent class="relative z-10" />
     </div>
   </div>
@@ -35,7 +35,7 @@ export default {
 <style>
 html,
 body {
-  overflow: hidden !important;
+  aoverflow: hidden !important;
 }
 </style>
 

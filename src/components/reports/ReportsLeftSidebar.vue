@@ -1,32 +1,59 @@
 <template>
-  <b-menu>
-    <b-menu-list label="Filters">
-      <b-menu-item class="text-white" :expanded="true">
-        <template slot="label">
-          Report Filter 1
-          <ChevronRight class="float-right" /><br />
-          <div
-            class="pl-4 w-11/12 truncate ... italic text-sm has-text-grey-light"
-          >
-            Value Here long value lots of text to see here
-          </div>
-        </template>
-      </b-menu-item>
-    </b-menu-list>
-  </b-menu>
+  <transition name="slide-fade" mode="out-in">
+    <b-menu v-if="activeFilter == null">
+      <b-menu-list label="Filters">
+        <FilterHeader
+          filter-name="Date From"
+          :filter-string="$options.filters.formatDate(filters.dateFrom)"
+          @click="activeFilter = 'dateFrom'"
+        />
+        <FilterHeader
+          filter-name="Date To"
+          :filter-string="$options.filters.formatDate(filters.dateTo)"
+          @click="activeFilter = 'dateTo'"
+        />
+      </b-menu-list>
+    </b-menu>
+
+    <FilterBody
+      filter-string="Date From"
+      :initialValue="filters.dateFrom"
+      mutation="set_date_from_filter"
+      type="date"
+      v-else-if="activeFilter == 'dateFrom'"
+      @close="activeFilter = null"
+    />
+
+    <FilterBody
+      filter-string="Date To"
+      :initialValue="filters.dateTo"
+      mutation="set_date_to_filter"
+      type="date"
+      v-else-if="activeFilter == 'dateTo'"
+      @close="activeFilter = null"
+    />
+
+  </transition>
 </template>
 
 <script>
-import ChevronRight from "vue-material-design-icons/ChevronRight.vue";
+import { mapGetters } from "vuex";
+
+import FilterBody from "@/components/ui/FilterBody";
+import FilterHeader from "@/components/ui/FilterHeader";
 
 export default {
   components: {
-    ChevronRight
+    FilterBody,
+    FilterHeader
   },
-  computed: {},
+  computed: {
+    ...mapGetters(["filters"])
+  },
   data() {
     return {
-      isActive: true
+      isActive: true,
+      activeFilter: null
     };
   }
 };

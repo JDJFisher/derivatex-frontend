@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import Moment from "moment";
 
 Vue.use(Vuex);
 
@@ -13,7 +14,9 @@ export default new Vuex.Store({
       sellingParty: [],
       asset: [],
       strikePrice: { min: null, max: null },
-      notionalValue: { in: null, max: null }
+      notionalValue: { in: null, max: null },
+      dateFrom: Moment().startOf('week').subtract(1, 'week'),
+      dateTo: Moment().endOf('week').subtract(1, 'week')
     },
     orderBy: {
       field: "date_of_trade",
@@ -62,6 +65,12 @@ export default new Vuex.Store({
     },
     set_notional_value_filter({ commit }, value) {
       commit("set_filter", { filter: "notionalValue", value: value });
+    },
+    set_date_from_filter({ commit }, value) {
+      commit("set_filter", { filter: "dateFrom", value: value });
+    },
+    set_date_to_filter({ commit }, value) {
+      commit("set_filter", { filter: "dateTo", value: value });
     },
     set_order_by({ commit }, value) {
       commit("set_order_by", value);

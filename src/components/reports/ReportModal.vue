@@ -4,7 +4,7 @@
           <p class="modal-card-title">View Report</p>
       </header>
       <section class="modal-card-body">
-          {{ report }}
+          {{ reportMeta }}
       </section>
       <footer class="modal-card-foot">
           <button class="button is-primary" type="button" @click="$parent.close()">Close</button>
@@ -16,11 +16,8 @@
 import { mapGetters } from "vuex";
 
 export default {
-  props: {
-    report: Object
-  },
   computed: {
-    ...mapGetters(["report"]),
+    ...mapGetters({"reportMeta": "report"}),
   }
 };
 </script>

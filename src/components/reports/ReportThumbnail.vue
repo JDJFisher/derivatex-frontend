@@ -6,19 +6,19 @@
           Derivatives
         </div>
         <div class="w-1/2 text-right">
-          {{ report.report.derivatives.length }}
+          {{ report.derivative_count }}
         </div>
         <div class="w-1/2 font-bold">
           Generated
         </div>
         <div class="w-1/2 text-right">
-          {{ report.report.generated }}
+          {{ report.creation_date | formatDateShort }}
         </div>
         <div class="w-1/2 font-bold">
           Status
         </div>
-        <div class="w-1/2 text-right">
-          {{ report.report.status }}
+        <div class="w-1/2 text-right" :class="{'has-text-danger': report.status == 'REDACTED', 'has-text-success': report.status == 'ACTIVE'}">
+          {{ report.status }}
         </div>
       </div>
     </div>
@@ -80,14 +80,14 @@ export default {
   methods: {
     downloadFile(type) {
       axios({
-        url: `${process.env.VUE_APP_API_BASE}/report-management/download-report/${type}/${this.report.report_id}`,
+        url: `${process.env.VUE_APP_API_BASE}/reporting/download-report/${type}/${this.report.id}`,
         method: 'GET',
         responseType: 'blob'
       }).then((response) => {
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement('a');
         link.href = url;
-        link.setAttribute('download', `report-${this.report.report_id}.${type}`);
+        link.setAttribute('download', `report-${this.report.id}.${type}`);
         document.body.appendChild(link);
         link.click();
       }).catch(error => {
