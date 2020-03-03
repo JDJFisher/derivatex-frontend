@@ -90,7 +90,8 @@ export default {
           parent: this,
           component: ReportModal,
           hasModalCard: true,
-          trapFocus: true
+          trapFocus: true,
+          fullScreen: true
       })
     },
     getReports(dateFrom, dateTo) {
