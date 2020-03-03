@@ -22,8 +22,6 @@
         />
       </div>
     </div>
-    {{ pendingReports }}
-    {{ allDates }}
   </div>
 </template>
 
