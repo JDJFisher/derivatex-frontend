@@ -9,6 +9,12 @@
       :close-on-select="false"
       v-model="newValue"
     />
+    <datepicker
+        class="text-black"
+        v-if="type == 'date'"
+        v-model="newDate"
+        name="datePicker"
+    />
     <div v-if="type == 'range'" class="flex flex-row w-full mt-4">
       <div class="flex-auto">
         <vue-numeric
@@ -16,7 +22,7 @@
           v-model="newMin"
           :max="newMax"
           :precision="2"
-          class="text-black p-1 rounded shadow w-full"
+          class="text-black p-1 rounded shadow w-full bg-white"
         />
       </div>
       <div class="flex-auto px-2 pt-1">
@@ -28,13 +34,13 @@
           v-model="newMax"
           :min="newMin"
           :precision="2"
-          class="text-black p-1 rounded shadow w-full"
+          class="text-black p-1 rounded shadow w-full bg-white"
         />
       </div>
     </div>
     <a class="button is-danger mt-4" @click="remove">
       <TrashCan />
-      Remove
+      {{ type == 'date' ? "Reset" : "Remove" }}
     </a>
     <a class="button is-accent float-right mt-4" @click="apply">
       <Check />
@@ -44,7 +50,10 @@
 </template>
 
 <script>
+import Moment from "moment";
+
 import VueNumeric from "vue-numeric";
+import Datepicker from 'vuejs-datepicker';
 import Multiselect from "vue-multiselect";
 import Check from "vue-material-design-icons/Check.vue";
 import TrashCan from "vue-material-design-icons/TrashCan.vue";
@@ -53,6 +62,7 @@ export default {
   components: {
     TrashCan,
     Check,
+    Datepicker,
     Multiselect,
     VueNumeric
   },
@@ -66,16 +76,19 @@ export default {
   mounted() {
     if (this.type == "multiselect") {
       this.newValue = this.initialValue;
-    } else {
+    } else if (this.type == "range") {
       this.newMin = this.initialValue.min || 0;
       this.newMax = this.initialValue.max || 0;
+    } else if (this.type == "date") {
+      this.newDate = this.initialValue.format("YYYY-MM-DD");
     }
   },
   data() {
     return {
       newValue: null,
       newMin: null,
-      newMax: null
+      newMax: null,
+      newDate: null
     };
   },
   methods: {
@@ -83,10 +96,14 @@ export default {
       if (this.newMax == 0) {
         return this.remove();
       }
-      var newVal =
-        this.type == "multiselect"
-          ? this.newValue
-          : { min: this.newMin, max: this.newMax };
+      var newVal;
+      if (this.type == "multiselect") {
+        newVal = this.newValue;
+      } else if (this.type == "range") {
+        newVal = { min: this.newMin, max: this.newMax };
+      } else if (this.type == "date") {
+        newVal = Moment(this.newDate);
+      }
       this.$store.dispatch(this.mutation, newVal);
       this.$emit("close");
     },
@@ -94,7 +111,15 @@ export default {
       this.newVal = [];
       this.newMin = null;
       this.newMax = null;
-      var newVal = this.type == "multiselect" ? [] : { min: null, max: null };
+      this.newDate = Moment();
+      var newVal;
+      if (this.type == "multiselect") {
+        newVal = [];
+      } else if (this.type == "range") {
+        newVal = { min: null, max: null };
+      } else if (this.type == "date") {
+        newVal = Moment();
+      }
       this.$store.dispatch(this.mutation, newVal);
       this.$emit("close");
     }

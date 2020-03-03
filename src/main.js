@@ -9,13 +9,29 @@ import vuetify from "./plugins/vuetify";
 Vue.config.productionTip = false;
 Vue.use(Buefy);
 
-Vue.filter('formatDate', function (value) {
+Vue.filter("formatDate", function(value) {
   return Moment(value).format("Do MMM YYYY");
-})
+});
 
-Vue.filter('formatCurrency', function (value, symbol, currency) {
-  return value + " " + currency;
-})
+Vue.filter("formatDateShort", function(value) {
+  return Moment(value).format("DD/MM/YYYY");
+});
+
+Vue.filter("formatDateJson", function(value) {
+  return Moment(value).format("YYYY-MM-DD");
+});
+
+Vue.filter("formatCurrency", function(value, symbol, currency) {
+  if (symbol != "?") {
+    if (symbol.length > 1) {
+      return symbol + " " + value.toFixed(2);
+    } else {
+      return symbol + value.toFixed(2);
+    }
+  } else {
+    return value.toFixed(2) + " " + currency;
+  }
+});
 
 export const eventBus = new Vue();
 

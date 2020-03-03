@@ -2,27 +2,27 @@
   <transition name="slide-fade" mode="out-in">
     <b-menu v-if="activeFilter == null">
       <b-menu-list label="Filters">
-        <DerivativeFilterHeader
+        <FilterHeader
           filter-name="Buying Party"
           :filter-string="buyingPartyString"
           @click="activeFilter = 'buyingParty'"
         />
-        <DerivativeFilterHeader
+        <FilterHeader
           filter-name="Selling Party"
           :filter-string="sellingPartyString"
           @click="activeFilter = 'sellingParty'"
         />
-        <DerivativeFilterHeader
+        <FilterHeader
           filter-name="Asset"
           :filter-string="assetString"
           @click="activeFilter = 'asset'"
         />
-        <DerivativeFilterHeader
+        <FilterHeader
           filter-name="Strike Price"
           :filter-string="strikePriceString"
           @click="activeFilter = 'strikePrice'"
         />
-        <DerivativeFilterHeader
+        <FilterHeader
           filter-name="Notional Value"
           :filter-string="notionalValueString"
           @click="activeFilter = 'notionalValue'"
@@ -30,7 +30,7 @@
       </b-menu-list>
     </b-menu>
 
-    <DerivativeFilter
+    <FilterBody
       filter-string="Buying Party"
       :initialValue="filters.buyingParty"
       mutation="set_buying_party_filter"
@@ -40,7 +40,7 @@
       @close="activeFilter = null"
     />
 
-    <DerivativeFilter
+    <FilterBody
       filter-string="Selling Party"
       :initialValue="filters.sellingParty"
       mutation="set_selling_party_filter"
@@ -50,7 +50,7 @@
       @close="activeFilter = null"
     />
 
-    <DerivativeFilter
+    <FilterBody
       filter-string="Asset"
       :initialValue="filters.asset"
       mutation="set_asset_filter"
@@ -60,7 +60,7 @@
       @close="activeFilter = null"
     />
 
-    <DerivativeFilter
+    <FilterBody
       filter-string="Strike Price"
       :initialValue="filters.strikePrice"
       mutation="set_strike_price_filter"
@@ -69,7 +69,7 @@
       @close="activeFilter = null"
     />
 
-    <DerivativeFilter
+    <FilterBody
       filter-string="Notional Value"
       :initialValue="filters.notionalValue"
       mutation="set_notional_value_filter"
@@ -83,13 +83,13 @@
 <script>
 import { mapGetters } from "vuex";
 
-import DerivativeFilter from "@/components/derivatives/DerivativeFilter";
-import DerivativeFilterHeader from "@/components/derivatives/DerivativeFilterHeader";
+import FilterBody from "@/components/ui/FilterBody";
+import FilterHeader from "@/components/ui/FilterHeader";
 
 export default {
   components: {
-    DerivativeFilter,
-    DerivativeFilterHeader
+    FilterBody,
+    FilterHeader
   },
   computed: {
     ...mapGetters(["filters"]),

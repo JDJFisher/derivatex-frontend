@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full h-full relative">
+  <div class="w-full h-full ml-64">
     <PageHeader class="relative z-10" />
     <div class="columns h-full">
       <div
