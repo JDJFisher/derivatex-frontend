@@ -45,6 +45,18 @@
           <chevron-down />
         </div>
       </b-navbar-item>
+      <b-navbar-item
+        :active="page == 'error_detection'"
+        @click="$store.dispatch('set_page', 'error_detection')"
+      >
+        <div
+          class="mx-6 w-full flex flex-row"
+          :class="{ 'has-text-grey-light': page != 'error_detection' }"
+        >
+          LEARNED BEHAVIOUR
+          <chevron-down />
+        </div>
+      </b-navbar-item>
     </template>
 
     <template slot="end">

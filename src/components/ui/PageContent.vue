@@ -1,31 +1,53 @@
 <template>
-  <div class="w-full h-full relative" style="background-color: #F0F0F0">
+  <div class="w-full h-full ml-64">
     <PageHeader class="relative z-10" />
     <div class="columns h-full">
-      <div class="column is-10">
-        <DerivativesList class="m-8" />
+      <div
+        id="main-content"
+        class="column overflow-auto"
+        :class="rightSidebarShow ? 'is-10' : 'is-12'"
+      >
+        <transition name="header-fade" mode="out-in">
+          <DerivativesList class="m-8" v-if="page == 'derivatives'" />
+          <ErrorDetection class="m-8" v-if="page == 'error_detection'" />
+          <Export class="m-8" v-if="page == 'export'" />
+          <ReportsList class="m-8" v-if="page == 'reports'" />
+        </transition>
       </div>
       <div class="column is-2">
-        <DerivativesRightSidebar
-          class="has-background-white h-full"
-          style="box-shadow: rgba(0, 0, 0, 0.25) 0px 0px 12px 0px;"
-        />
+        <RightSidebar />
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 import PageHeader from "@/components/ui/PageHeader";
 import DerivativesList from "@/views/DerivativesList";
-import DerivativesRightSidebar from "@/components/derivatives/DerivativesRightSidebar";
+import ErrorDetection from "@/views/ErrorDetection";
+import Export from "@/views/Export";
+import ReportsList from "@/views/ReportsList";
+import RightSidebar from "@/components/ui/RightSidebar";
 
 export default {
   components: {
     PageHeader,
     DerivativesList,
-    DerivativesRightSidebar
+    ErrorDetection,
+    Export,
+    ReportsList,
+    RightSidebar
   },
-  computed: {}
+  computed: {
+    ...mapGetters(["page", "rightSidebarShow"])
+  }
 };
 </script>
+
+<style>
+#main-content {
+  transition: width 0.3s;
+}
+</style>
