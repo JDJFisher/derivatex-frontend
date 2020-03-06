@@ -48,6 +48,16 @@ export default {
 .v-timeline::before {
   margin-left: 0.7em;
 }
+
+.multiselect__tags {
+  height: 37px!important;
+  min-height: 37px!important;
+  padding: 4px 40px 0 8px!important;
+}
+
+.multiselect__select {
+  height: 36px!important;
+}
 </style>
 
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>

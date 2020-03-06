@@ -90,7 +90,7 @@ export default {
           hasModalCard: true,
           trapFocus: true,
           fullScreen: true
-      })
+      });
     },
     getReports(dateFrom, dateTo) {
       this.reports = [];

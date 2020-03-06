@@ -22,7 +22,8 @@ export default new Vuex.Store({
       field: "date_of_trade",
       order: "ascending"
     },
-    report: null
+    report: null,
+    user: null
   },
   mutations: {
     set_page(state, page) {
@@ -42,6 +43,9 @@ export default new Vuex.Store({
     },
     set_report(state, report) {
       state.report = report;
+    },
+    set_user(state, user) {
+      state.user = user;
     }
   },
   actions: {
@@ -80,9 +84,15 @@ export default new Vuex.Store({
     },
     set_report({ commit }, value) {
       commit("set_report", value);
+    },
+    set_user({ commit }, value) {
+      commit("set_user", value);
     }
   },
   getters: {
+    user: state => {
+      return state.user;
+    },
     page: state => {
       return state.page;
     },

@@ -1,10 +1,16 @@
 <template>
   <div>
     <div class="mb-4 flex flex-row">
+      <b-button
+        class="w-1/12 mr-4 is-accent"
+        @click="addDerivative"
+      >
+        Add Derivative
+      </b-button>
       <b-input
         v-model="searchString"
         placeholder="Start typing to search..."
-        class="w-9/12 flex-auto mr-4 border-none"
+        class="w-6/12 flex-auto mr-4 border-none"
       />
       <div
         class="bg-white rounded shadow px-2 py-1 w-3/12 flex-auto flex flex-row"
@@ -90,6 +96,7 @@ import { EventBus } from '@/event-bus.js';
 
 import ArrowUp from "vue-material-design-icons/ArrowUp.vue";
 import ArrowDown from "vue-material-design-icons/ArrowDown.vue";
+import AddDerivativeModal from "@/components/derivatives/AddDerivativeModal";
 
 const axios = require("axios");
 
@@ -187,6 +194,14 @@ export default {
     }
   },
   methods: {
+    addDerivative() {
+      this.$buefy.modal.open({
+          parent: this,
+          component: AddDerivativeModal,
+          hasModalCard: true,
+          trapFocus: true
+      });
+    },
     tableRowSelect(payload) {
       this.$store.dispatch("set_right_sidebar_show", true);
       this.$store.dispatch("set_right_sidebar_data", payload);

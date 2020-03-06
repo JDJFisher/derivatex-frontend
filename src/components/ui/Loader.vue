@@ -75,7 +75,6 @@ export default {
     };
   },
   mounted() {
-    this.$emit("finish");
     this.borderWidth = "8px";
     setTimeout(
       function() {
@@ -126,7 +125,8 @@ export default {
             "password": this.password
           }
         )
-        .then(() => {
+        .then((response) => {
+          this.$store.dispatch('set_user', response.data.user);
           this.$emit("finish");
         }).catch(() => {
           this.message = "Incorrect credentials"
