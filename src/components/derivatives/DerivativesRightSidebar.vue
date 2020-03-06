@@ -2,7 +2,7 @@
   <div class="p-4 w-full flex flex-col">
     <div>
       <p class="subtitle is-5 pt-4 has-text-accent">
-        Derivative: {{ derivative.id }}
+        Derivative: {{ derivative.code }}
       </p>
       <div class="content">
         <b>Asset</b>: {{ derivative.asset }}<br />

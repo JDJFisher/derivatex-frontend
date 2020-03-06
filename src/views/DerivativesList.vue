@@ -112,9 +112,8 @@ export default {
       loading: false,
       columns: [
         {
-          field: "id",
-          label: "ID",
-          width: "40"
+          field: "code",
+          label: "Code"
         },
         {
           field: "buying_party",
