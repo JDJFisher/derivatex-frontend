@@ -51,6 +51,7 @@
 
 <script>
 import Moment from "moment";
+import { EventBus } from '@/event-bus.js';
 
 import VueNumeric from "vue-numeric";
 import Datepicker from 'vuejs-datepicker';
@@ -105,6 +106,7 @@ export default {
         newVal = Moment(this.newDate);
       }
       this.$store.dispatch(this.mutation, newVal);
+      EventBus.$emit("refreshFilters");
       this.$emit("close");
     },
     remove() {
@@ -121,6 +123,7 @@ export default {
         newVal = Moment();
       }
       this.$store.dispatch(this.mutation, newVal);
+      EventBus.$emit("refreshFilters");
       this.$emit("close");
     }
   }

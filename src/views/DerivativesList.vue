@@ -86,6 +86,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+import { EventBus } from '@/event-bus.js';
 
 import ArrowUp from "vue-material-design-icons/ArrowUp.vue";
 import ArrowDown from "vue-material-design-icons/ArrowDown.vue";
@@ -103,6 +104,7 @@ export default {
       newOrderByField: null,
       searchString: null,
       derivatives: [],
+      derivativeIds: [],
       paginationData: {
         total: 0,
         currentPage: 1
@@ -117,6 +119,10 @@ export default {
         {
           field: "buying_party",
           label: "Buying Party"
+        },
+        {
+          field: "selling_party",
+          label: "Selling Party"
         },
         {
           field: "quantity",
@@ -152,6 +158,9 @@ export default {
   mounted() {
     this.newOrderByField = this.orderBy.field;
     this.getDerivatives(1);
+    EventBus.$on("refreshFilters", () => {
+      this.getDerivatives(this.paginationData.currentPage);
+    });
   },
   watch: {
     "paginationData.currentPage": function() {
@@ -159,11 +168,12 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["orderBy"]),
+    ...mapGetters(["orderBy", "filters"]),
     dummyData() {
       var dummyDerivative = {
         id: "─",
         buying_party: "──────",
+        selling_party: "──────",
         quantity: "──",
         asset: "──────",
         strike_price: "───",
@@ -187,24 +197,43 @@ export default {
         order: this.orderBy.order,
         field: this.newOrderByField
       });
+      this.getDerivatives(this.paginationData.currentPage);
     },
     changeOrderByOrder(value) {
       this.$store.dispatch("set_order_by", {
         order: value,
         field: this.orderBy.field
       });
+      this.getDerivatives(this.paginationData.currentPage);
     },
     getDerivatives(page_number) {
       this.derivatives = [];
       this.loading = true;
       var derivativesLeftToLoad = 0;
+
+      var url = `/derivative-management/index-derivatives?page_number=${(page_number - 1)}&order_key=${this.orderBy.field}`;
+      if (this.orderBy.order == 'descending') {
+        url += "&reverse_order=true";
+      }
+      if (this.filters.strikePrice.min) {
+        url += `&min_strike_price=${this.filters.strikePrice.min}`;
+      }
+      if (this.filters.strikePrice.max) {
+        url += `&max_strike_price=${this.filters.strikePrice.max}`;
+      }
+      if (this.filters.notionalValue.min) {
+        url += `&min_notional_value=${this.filters.notionalValue.min}`;
+      }
+      if (this.filters.notionalValue.max) {
+        url += `&min_notional_value=${this.filters.notionalValue.max}`;
+      }
+
       axios
         .get(
-          process.env.VUE_APP_API_BASE +
-            "/derivative-management/index-derivatives?page_number=" +
-            (page_number - 1)
+          process.env.VUE_APP_API_BASE + url
         )
         .then(response => {
+          this.derivativeIds = response.data.derivatives;
           derivativesLeftToLoad = response.data.derivatives.length;
           response.data.derivatives.forEach(deriativeId => {
             axios
@@ -241,7 +270,9 @@ export default {
                 derivativesLeftToLoad -= 1;
                 if (derivativesLeftToLoad == 0) {
                   this.loading = false;
-                  this.derivatives.sort((a, b) => a.id - b.id);
+                  this.derivatives.sort((a, b) => {
+                    return this.derivativeIds.findIndex(x => x == a.id) - this.derivativeIds.findIndex(x => x == b.id);
+                  });
                 }
               });
           });

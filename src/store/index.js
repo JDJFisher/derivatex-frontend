@@ -20,7 +20,7 @@ export default new Vuex.Store({
     },
     orderBy: {
       field: "date_of_trade",
-      order: "descending"
+      order: "ascending"
     },
     report: null
   },

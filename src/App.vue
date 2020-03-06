@@ -33,9 +33,20 @@ export default {
 </script>
 
 <style>
-html,
-body {
-  aoverflow: hidden !important;
+.v-timeline-item__body {
+  max-width: initial!important;
+  margin-left:1rem;
+}
+.v-timeline-item__divider {
+  min-width: initial!important;
+}
+
+.v-card::before {
+  display:none;
+}
+
+.v-timeline::before {
+  margin-left: 0.7em;
 }
 </style>
 
