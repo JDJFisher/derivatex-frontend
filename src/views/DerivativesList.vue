@@ -2,7 +2,7 @@
   <div>
     <div class="mb-4 flex flex-row">
       <b-button
-        class="w-1/12 mr-4 is-accent"
+        class="w-2/12 mr-4 is-accent"
         @click="addDerivative"
       >
         Add Derivative
@@ -10,7 +10,7 @@
       <b-input
         v-model="searchString"
         placeholder="Start typing to search..."
-        class="w-6/12 flex-auto mr-4 border-none"
+        class="w-5/12 flex-auto mr-4 border-none"
       />
       <div
         class="bg-white rounded shadow px-2 py-1 w-3/12 flex-auto flex flex-row"
