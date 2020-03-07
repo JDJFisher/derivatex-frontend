@@ -2,12 +2,22 @@
   <div>
     {{ filterString }}
     <multiselect
-      v-if="type == 'multiselect'"
+      v-if="type == 'multiselect' && !multiselectObject"
       class="mt-4"
       :options="options"
       :multiple="true"
       :close-on-select="false"
       v-model="newValue"
+    />
+    <multiselect
+      v-if="type == 'multiselect' && multiselectObject"
+      class="mt-4"
+      :options="options"
+      :multiple="true"
+      :close-on-select="false"
+      v-model="newValue"
+      :track-by="multiselectTrackBy"
+      :label="multiselectLabel"
     />
     <datepicker
       class="text-black"
@@ -72,7 +82,10 @@ export default {
     initialValue: { required: true },
     mutation: String,
     options: Array,
-    type: String
+    type: String,
+    multiselectObject: Boolean,
+    multiselectTrackBy: String,
+    multiselectLabel: String
   },
   mounted() {
     if (this.type == "multiselect") {

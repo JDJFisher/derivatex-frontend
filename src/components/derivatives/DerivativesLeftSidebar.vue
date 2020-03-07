@@ -35,7 +35,10 @@
       :initialValue="filters.buyingParty"
       mutation="set_buying_party_filter"
       type="multiselect"
-      :options="[1, 2, 3]"
+      :multiselect-object="true"
+      multiselect-key-by="value"
+      multiselect-label="label"
+      :options="companies"
       v-else-if="activeFilter == 'buyingParty'"
       @close="activeFilter = null"
     />
@@ -45,7 +48,10 @@
       :initialValue="filters.sellingParty"
       mutation="set_selling_party_filter"
       type="multiselect"
-      :options="[4, 5, 6]"
+      :multiselect-object="true"
+      multiselect-key-by="value"
+      multiselect-label="label"
+      :options="companies"
       v-else-if="activeFilter == 'sellingParty'"
       @close="activeFilter = null"
     />
@@ -55,7 +61,7 @@
       :initialValue="filters.asset"
       mutation="set_asset_filter"
       type="multiselect"
-      :options="[7, 8, 9]"
+      :options="assets"
       v-else-if="activeFilter == 'asset'"
       @close="activeFilter = null"
     />
@@ -92,14 +98,14 @@ export default {
     FilterHeader
   },
   computed: {
-    ...mapGetters(["filters"]),
+    ...mapGetters(["filters", "companies", "assets"]),
     buyingPartyString() {
       if (this.filters.buyingParty.length == 0) {
         return "No filter";
       }
       return this.filters.buyingParty
         .reduce((acc, x) => {
-          return acc + x + ", ";
+          return acc + x.value + ", ";
         }, "")
         .slice(0, -2);
     },
@@ -109,7 +115,7 @@ export default {
       }
       return this.filters.sellingParty
         .reduce((acc, x) => {
-          return acc + x + ", ";
+          return acc + x.value + ", ";
         }, "")
         .slice(0, -2);
     },

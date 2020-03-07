@@ -239,6 +239,15 @@ export default {
       if (this.filters.notionalValue.max) {
         url += `&min_notional_value=${this.filters.notionalValue.max}`;
       }
+      this.filters.buyingParty.map(buying_party => {
+        url += `&buyers=${buying_party.value}`;
+      })
+      this.filters.sellingParty.map(selling_party => {
+        url += `&sellers=${selling_party.value}`;
+      })
+      this.filters.asset.map(asset => {
+        url += `&assets=${asset}`;
+      })
 
       axios
         .get(process.env.VUE_APP_API_BASE + url)
