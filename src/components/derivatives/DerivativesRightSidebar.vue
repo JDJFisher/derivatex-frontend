@@ -1,9 +1,19 @@
 <template>
   <div class="p-4 w-full flex flex-col">
-    <div>
+    <div class="mb-4">
       <p class="subtitle is-5 pt-4 has-text-accent">
         Derivative: {{ derivative.code }}
       </p>
+    </div>
+    <div class="mb-4">
+      <b-button class="is-accent">
+        Edit
+      </b-button>
+      <b-button class="is-danger float-right">
+        Delete
+      </b-button>
+    </div>
+    <div>
       <div class="content">
         <b>Asset</b>: {{ derivative.asset }}<br />
         <b>Buying Party</b>: {{ derivative.buying_party }}<br />
