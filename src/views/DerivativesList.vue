@@ -115,11 +115,12 @@
       Try changing your filters
     </div>
     <b-table
-      :data="!loading ? derivatives : dummyData"
+      id="derivative-table"
+      :data="!loading ? highlightedData : dummyData"
       :columns="columns"
       :selected.sync="selected"
       :row-class="
-        (row, index) => (row.deleted == 1 ? 'line-through text-gray-500' : '')
+        (row, index) => (row.deleted == 1 ? 'line-through text-gray-500 deriv-row' : 'deriv-row')
       "
       @select="tableRowSelect($event)"
       v-if="loading || derivatives.length > 0"
@@ -178,47 +179,58 @@ export default {
         total: 0,
         currentPage: 1
       },
+      loadCounter: 0,
       loading: false,
       columns: [
         {
           field: "code",
-          label: "Code"
+          label: "Code",
+          renderHtml: true
         },
         {
           field: "buying_party",
-          label: "Buying Party"
+          label: "Buying Party",
+          renderHtml: true
         },
         {
           field: "selling_party",
-          label: "Selling Party"
+          label: "Selling Party",
+          renderHtml: true
         },
         {
           field: "quantity",
-          label: "Quantity"
+          label: "Quantity",
+          renderHtml: true
         },
         {
           field: "asset",
-          label: "Asset"
+          label: "Asset",
+          renderHtml: true
         },
         {
           field: "strike_price",
-          label: "Strike Price"
+          label: "Strike Price",
+          renderHtml: true
         },
         {
           field: "underlying_price",
-          label: "Underlying Price"
+          label: "Underlying Price",
+          renderHtml: true
         },
         {
           field: "notional_value",
-          label: "Notional Value"
+          label: "Notional Value",
+          renderHtml: true
         },
         {
           field: "date_of_trade",
-          label: "Trade Date"
+          label: "Trade Date",
+          renderHtml: true
         },
         {
           field: "maturity_date",
-          label: "Maturity Date"
+          label: "Maturity Date",
+          renderHtml: true
         }
       ]
     };
@@ -233,6 +245,10 @@ export default {
   watch: {
     "paginationData.currentPage": function() {
       this.getDerivatives(this.paginationData.currentPage);
+    },
+    searchString: function() {
+      this.$store.dispatch('set_search_term_filter', this.searchString);
+      EventBus.$emit("refreshFilters");
     }
   },
   computed: {
@@ -253,6 +269,18 @@ export default {
       return Array(15)
         .fill()
         .map(() => dummyDerivative);
+    },
+    highlightedData() {
+      if (!this.searchString) {return this.derivatives;}
+      return this.derivatives.map((derivative) => {
+        var highlighted = { ...derivative };
+        var regex = new RegExp(this.searchString, "i");
+        var fields = ['code', 'buying_party', 'selling_party', 'asset', 'date_of_trade', 'maturity_date'];
+        fields.forEach(property => {
+          highlighted[property] = highlighted[property].replace(regex, "<span class='highlight'>$&</span>")
+        })
+        return highlighted;
+      });
     }
   },
   methods: {
@@ -288,6 +316,8 @@ export default {
     },
     getDerivatives(page_number) {
       this.derivatives = [];
+      this.loadCounter += 1;
+      var thisLoadCounter = this.loadCounter;
       this.loading = true;
       var derivativesLeftToLoad = 0;
 
@@ -322,6 +352,9 @@ export default {
       }
       if (this.filters.hideNotDeleted) {
         url += `&hide_not_deleted=true`;
+      }
+      if (this.filters.searchTerm.length > 0) {
+        url += `&search_term=${this.filters.searchTerm}`;
       }
 
       axios
@@ -371,16 +404,18 @@ export default {
                   newDerivative.notional_curr_symbol,
                   newDerivative.notional_curr_code
                 );
-                this.derivatives.push(newDerivative);
-                derivativesLeftToLoad -= 1;
-                if (derivativesLeftToLoad == 0) {
-                  this.loading = false;
-                  this.derivatives.sort((a, b) => {
-                    return (
-                      this.derivativeIds.findIndex(x => x == a.id) -
-                      this.derivativeIds.findIndex(x => x == b.id)
-                    );
-                  });
+                if (thisLoadCounter == this.loadCounter) {
+                  this.derivatives.push(newDerivative);
+                  derivativesLeftToLoad -= 1;
+                  if (derivativesLeftToLoad == 0) {
+                    this.loading = false;
+                    this.derivatives.sort((a, b) => {
+                      return (
+                        this.derivativeIds.findIndex(x => x == a.id) -
+                        this.derivativeIds.findIndex(x => x == b.id)
+                      );
+                    });
+                  }
                 }
               });
           });
@@ -404,6 +439,11 @@ export default {
 </script>
 
 <style>
+.highlight {
+  color: red;
+  font-weight: bold!important;
+}
+
 select {
   padding-top: 0 !important;
   padding-bottom: 0 !important;

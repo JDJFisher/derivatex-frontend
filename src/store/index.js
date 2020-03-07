@@ -22,7 +22,8 @@ export default new Vuex.Store({
         .endOf("week")
         .subtract(1, "week"),
       showDeleted: false,
-      hideNotDeleted: false
+      hideNotDeleted: false,
+      searchTerm: ""
     },
     orderBy: {
       field: "date_of_trade",
@@ -99,6 +100,9 @@ export default new Vuex.Store({
     },
     set_hide_not_deleted_filter({ commit }, value) {
       commit("set_filter", { filter: "hideNotDeleted", value: value });
+    },
+    set_search_term_filter({ commit }, value) {
+      commit("set_filter", { filter: "searchTerm", value: value });
     },
     set_order_by({ commit }, value) {
       commit("set_order_by", value);
