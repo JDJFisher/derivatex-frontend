@@ -1,7 +1,10 @@
 <template>
   <div class="modal-card">
     <header class="modal-card-head has-background-primary">
-      <p class="modal-card-title has-text-white">Add Derivative</p>
+      <p class="modal-card-title has-text-white">
+        Edit Derivative
+        <span class="text-sm">{{ changeMade ? "(Unsaved Changes)" : "" }}</span>
+      </p>
     </header>
     <section class="modal-card-body ms-thin">
       <b-field
@@ -163,7 +166,7 @@
           type="button"
           @click="add"
         >
-          Add Derivative
+          Update Derivative
         </button>
       </div>
     </footer>
@@ -174,6 +177,7 @@
 import Moment from "moment";
 const axios = require("axios");
 import { mapGetters } from "vuex";
+import { EventBus } from "@/event-bus.js";
 
 import Multiselect from "vue-multiselect";
 
@@ -182,7 +186,91 @@ export default {
     Multiselect
   },
   computed: {
-    ...mapGetters(["user", "currencies", "assets", "companies"])
+    ...mapGetters([
+      "user",
+      "currencies",
+      "assets",
+      "companies",
+      "rightSidebarData"
+    ]),
+    changeMade() {
+      return Object.keys(this.updates).length > 0;
+    },
+    updates() {
+      var result = {};
+      if (this.formData.code != this.rightSidebarData.code) {
+        result["code"] = this.formData.code;
+      }
+      if (
+        this.formData.buying_party !=
+        this.companies.find(x => x.value == this.rightSidebarData.buying_party)
+      ) {
+        result["buying_party"] = this.formData.buying_party;
+      }
+      if (
+        this.formData.selling_party !=
+        this.companies.find(x => x.value == this.rightSidebarData.selling_party)
+      ) {
+        result["selling_party"] = this.formData.selling_party;
+      }
+      if (this.formData.asset != this.rightSidebarData.asset) {
+        result["asset"] = this.formData.asset;
+      }
+      if (this.formData.quantity != this.rightSidebarData.quantity) {
+        result["quantity"] = this.formData.quantity;
+      }
+      if (
+        this.formData.strike_price != this.rightSidebarData.strike_price_orig
+      ) {
+        result["strike_price"] = this.formData.strike_price;
+      }
+      if (
+        this.formData.notional_curr_code !=
+        this.currencies.find(
+          x => x.value == this.rightSidebarData.notional_curr_code
+        )
+      ) {
+        result["notional_curr_code"] = this.formData.notional_curr_code;
+      }
+      if (
+        !Moment(this.formData.date_of_trade).isSame(
+          Moment(this.rightSidebarData.date_of_trade_orig),
+          "day"
+        )
+      ) {
+        result["date_of_trade"] = this.formData.date_of_trade;
+      }
+      if (
+        !Moment(this.formData.maturity_date).isSame(
+          Moment(this.rightSidebarData.maturity_date_orig),
+          "day"
+        )
+      ) {
+        result["maturity_date"] = this.formData.maturity_date;
+      }
+      return result;
+    }
+  },
+  mounted() {
+    this.formData.code = this.rightSidebarData.code;
+    this.formData.buying_party = this.companies.find(
+      x => x.value == this.rightSidebarData.buying_party
+    );
+    this.formData.selling_party = this.companies.find(
+      x => x.value == this.rightSidebarData.selling_party
+    );
+    this.formData.asset = this.rightSidebarData.asset;
+    this.formData.quantity = this.rightSidebarData.quantity;
+    this.formData.strike_price = this.rightSidebarData.strike_price_orig;
+    this.formData.notional_curr_code = this.currencies.find(
+      x => x.value == this.rightSidebarData.notional_curr_code
+    );
+    this.formData.date_of_trade = Moment(
+      this.rightSidebarData.date_of_trade_orig
+    ).toDate();
+    this.formData.maturity_date = Moment(
+      this.rightSidebarData.maturity_date_orig
+    ).toDate();
   },
   data() {
     return {
@@ -234,38 +322,53 @@ export default {
     },
     add() {
       if (this.validate()) {
-        var formData = { ...this.formData };
-        formData.notional_curr_code = formData.notional_curr_code.value;
-        formData.buying_party = formData.buying_party.value;
-        formData.selling_party = formData.selling_party.value;
-        formData.strike_price = parseFloat(formData.strike_price);
-        formData.quantity = parseInt(formData.quantity);
-        formData.date_of_trade = Moment(formData.date_of_trade).format(
-          "YYYY-MM-DD"
-        );
-        formData.maturity_date = Moment(formData.maturity_date).format(
-          "YYYY-MM-DD"
-        );
+        var formData = { ...this.updates };
+        if (formData.notional_curr_code) {
+          formData.notional_curr_code = formData.notional_curr_code.value;
+        }
+        if (formData.buying_party) {
+          formData.buying_party = formData.buying_party.value;
+        }
+        if (formData.selling_party) {
+          formData.selling_party = formData.selling_party.value;
+        }
+        if (formData.strike_price) {
+          formData.strike_price = parseFloat(formData.strike_price);
+        }
+        if (formData.quantity) {
+          formData.quantity = parseInt(formData.quantity);
+        }
+        if (formData.date_of_trade) {
+          formData.date_of_trade = Moment(formData.date_of_trade).format(
+            "YYYY-MM-DD"
+          );
+        }
+        if (formData.maturity_date) {
+          formData.maturity_date = Moment(formData.maturity_date).format(
+            "YYYY-MM-DD"
+          );
+        }
         axios
           .post(
-            `${process.env.VUE_APP_API_BASE}/derivative-management/add-derivative`,
+            `${process.env.VUE_APP_API_BASE}/derivative-management/update-derivative/${this.rightSidebarData.id}`,
             {
-              derivative: formData,
+              updates: formData,
               user_id: this.user.id
             }
           )
           .then(() => {
             this.$buefy.snackbar.open({
-              message: "Derivative added successfully",
+              message: "Derivative edited successfully",
               type: "is-success",
               position: "is-top",
               indefinite: false
             });
+            EventBus.$emit("refreshFilters");
             this.$parent.close();
           })
           .catch(error => {
             this.$buefy.snackbar.open({
-              message: "Failed to create derivative.<br>" + error.response.data,
+              message: "Failed to edit derivative.<br>" + error.response.data,
               type: "is-warning",
               position: "is-top",
               indefinite: false

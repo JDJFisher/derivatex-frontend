@@ -6,16 +6,30 @@
       </p>
     </div>
     <div class="mb-4">
-      <b-button class="is-accent" :disabled="derivative.absolute" @click="editDerivative">
+      <b-button
+        class="is-accent"
+        :disabled="derivative.absolute"
+        @click="editDerivative"
+      >
         Edit
       </b-button>
-      <b-button class="is-danger float-right" :disabled="derivative.absolute" @click="deleteDerivative">
+      <b-button
+        class="is-danger float-right"
+        :disabled="derivative.absolute"
+        @click="deleteDerivative"
+      >
         Delete
       </b-button>
-      <p class="text-xs text-center italic pt-2" v-if="derivative.absolute && !derivative.deleted">
+      <p
+        class="text-xs text-center italic pt-2"
+        v-if="derivative.absolute && !derivative.deleted"
+      >
         Derivative cannot be edited or deleted - it is absolute.
       </p>
-      <p class="text-xs text-center italic pt-2 has-text-danger" v-if="derivative.deleted">
+      <p
+        class="text-xs text-center italic pt-2 has-text-danger"
+        v-if="derivative.deleted"
+      >
         Derivative has been deleted.
       </p>
     </div>
@@ -55,15 +69,16 @@
               <b
                 ><i>{{ action.user.f_name }} {{ action.user.l_name }}</i></b
               ><br />
-              {{ action.timestamp | formatDateTime }}<br /><br />
+              <span class="text-xs">{{ action.timestamp | formatDateTime }}<br /></span>
               <b>{{ action.type | titleCase }}</b>
+              <span class="text-sm ml-1">{{ (action.type == 'UPDATE' ? action.update_log.attribute : '') | titleCase }}</span>
               <p v-if="action.type == 'UPDATE'">
-                <b>{{ action.update_log.attribute | titleCase }}</b
-                ><br />
-                <i
-                  >{{ action.update_log.old_value }} →
-                  {{ action.update_log.new_value }}</i
-                >
+                <span class="text-xs">
+                  <i
+                    >{{ action.update_log.old_value }} →
+                    {{ action.update_log.new_value }}</i
+                  >
+                </span>
               </p>
             </v-card>
           </v-timeline-item>

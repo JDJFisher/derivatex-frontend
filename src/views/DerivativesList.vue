@@ -44,9 +44,7 @@
 
         <div class="w-1/6 flex flex-row">
           <div class="w-1/2">
-            <b-tooltip label="Order ascending"
-              position="is-top"
-              animated>
+            <b-tooltip label="Order ascending" position="is-top" animated>
               <ArrowUp
                 class="w-full cursor-pointer"
                 :class="orderBy.order == 'ascending' ? 'accent' : ''"
@@ -55,9 +53,7 @@
             </b-tooltip>
           </div>
           <div class="w-1/2">
-            <b-tooltip label="Order descending"
-              position="is-top"
-              animated>
+            <b-tooltip label="Order descending" position="is-top" animated>
               <ArrowDown
                 class="w-full cursor-pointer"
                 :class="orderBy.order == 'descending' ? 'accent' : ''"
@@ -69,24 +65,40 @@
 
         <div class="w-1/6 flex flex-row">
           <div class="w-1/2">
-            <b-tooltip :label="`${!filters.hideNotDeleted ? 'Hide' : 'Show'} not deleted`"
+            <b-tooltip
+              :label="
+                `${!filters.hideNotDeleted ? 'Hide' : 'Show'} not deleted`
+              "
               position="is-top"
-              animated>
+              animated
+            >
               <DeleteOff
                 class="w-full cursor-pointer"
                 :class="!filters.hideNotDeleted ? 'accent' : ''"
-                @click="changeShowDeleted('set_hide_not_deleted_filter', !filters.hideNotDeleted)"
+                @click="
+                  changeShowDeleted(
+                    'set_hide_not_deleted_filter',
+                    !filters.hideNotDeleted
+                  )
+                "
               />
             </b-tooltip>
           </div>
           <div class="w-1/2">
-            <b-tooltip :label="`${filters.showDeleted ? 'Hide' : 'Show'} deleted`"
+            <b-tooltip
+              :label="`${filters.showDeleted ? 'Hide' : 'Show'} deleted`"
               position="is-top"
-              animated>
+              animated
+            >
               <Delete
                 class="w-full cursor-pointer"
                 :class="filters.showDeleted ? 'accent' : ''"
-                @click="changeShowDeleted('set_show_deleted_filter', !filters.showDeleted)"
+                @click="
+                  changeShowDeleted(
+                    'set_show_deleted_filter',
+                    !filters.showDeleted
+                  )
+                "
               />
             </b-tooltip>
           </div>
@@ -95,15 +107,20 @@
     </div>
 
     <b-loading :is-full-page="false" :active.sync="loading"></b-loading>
-    <div class="text-lg text-center mt-16" v-if="!loading && derivatives.length == 0">
-      There are no derivatives to show<br>
+    <div
+      class="text-lg text-center mt-16"
+      v-if="!loading && derivatives.length == 0"
+    >
+      There are no derivatives to show<br />
       Try changing your filters
     </div>
     <b-table
       :data="!loading ? derivatives : dummyData"
       :columns="columns"
       :selected.sync="selected"
-      :row-class="(row, index) => row.deleted == 1 ? 'line-through text-gray-500' : ''"
+      :row-class="
+        (row, index) => (row.deleted == 1 ? 'line-through text-gray-500' : '')
+      "
       @select="tableRowSelect($event)"
       v-if="loading || derivatives.length > 0"
     >
@@ -325,6 +342,14 @@ export default {
               .then(response => {
                 /* eslint no-console: ["error", { allow: ["log"] }] */
                 var newDerivative = response.data.derivative;
+                newDerivative.maturity_date_orig = newDerivative.maturity_date;
+                newDerivative.date_of_trade_orig = newDerivative.date_of_trade;
+                newDerivative.strike_price_orig = newDerivative.strike_price;
+                newDerivative.underlying_price_orig =
+                  newDerivative.underlying_price;
+                newDerivative.notional_value_orig =
+                  newDerivative.notional_value;
+
                 newDerivative.maturity_date = this.$options.filters.formatDate(
                   newDerivative.maturity_date
                 );
