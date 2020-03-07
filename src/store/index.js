@@ -15,15 +15,22 @@ export default new Vuex.Store({
       asset: [],
       strikePrice: { min: null, max: null },
       notionalValue: { in: null, max: null },
-      dateFrom: Moment().startOf('week').subtract(1, 'week'),
-      dateTo: Moment().endOf('week').subtract(1, 'week')
+      dateFrom: Moment()
+        .startOf("week")
+        .subtract(1, "week"),
+      dateTo: Moment()
+        .endOf("week")
+        .subtract(1, "week")
     },
     orderBy: {
       field: "date_of_trade",
       order: "ascending"
     },
     report: null,
-    user: null
+    user: null,
+    companies: [],
+    assets: [],
+    currencies: []
   },
   mutations: {
     set_page(state, page) {
@@ -46,6 +53,15 @@ export default new Vuex.Store({
     },
     set_user(state, user) {
       state.user = user;
+    },
+    set_companies(state, companies) {
+      state.companies = companies;
+    },
+    set_assets(state, assets) {
+      state.assets = assets;
+    },
+    set_currencies(state, currencies) {
+      state.currencies = currencies;
     }
   },
   actions: {
@@ -87,9 +103,27 @@ export default new Vuex.Store({
     },
     set_user({ commit }, value) {
       commit("set_user", value);
+    },
+    set_companies({ commit }, value) {
+      commit("set_companies", value);
+    },
+    set_assets({ commit }, value) {
+      commit("set_assets", value);
+    },
+    set_currencies({ commit }, value) {
+      commit("set_currencies", value);
     }
   },
   getters: {
+    companies: state => {
+      return state.companies;
+    },
+    assets: state => {
+      return state.assets;
+    },
+    currencies: state => {
+      return state.currencies;
+    },
     user: state => {
       return state.user;
     },

@@ -10,10 +10,10 @@
       v-model="newValue"
     />
     <datepicker
-        class="text-black"
-        v-if="type == 'date'"
-        v-model="newDate"
-        name="datePicker"
+      class="text-black"
+      v-if="type == 'date'"
+      v-model="newDate"
+      name="datePicker"
     />
     <div v-if="type == 'range'" class="flex flex-row w-full mt-4">
       <div class="flex-auto">
@@ -40,7 +40,7 @@
     </div>
     <a class="button is-danger mt-4" @click="remove">
       <TrashCan />
-      {{ type == 'date' ? "Reset" : "Remove" }}
+      {{ type == "date" ? "Reset" : "Remove" }}
     </a>
     <a class="button is-accent float-right mt-4" @click="apply">
       <Check />
@@ -51,10 +51,10 @@
 
 <script>
 import Moment from "moment";
-import { EventBus } from '@/event-bus.js';
+import { EventBus } from "@/event-bus.js";
 
 import VueNumeric from "vue-numeric";
-import Datepicker from 'vuejs-datepicker';
+import Datepicker from "vuejs-datepicker";
 import Multiselect from "vue-multiselect";
 import Check from "vue-material-design-icons/Check.vue";
 import TrashCan from "vue-material-design-icons/TrashCan.vue";

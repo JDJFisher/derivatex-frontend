@@ -62,10 +62,18 @@
     <template slot="end">
       <b-navbar-item tag="div">
         <p class="text-right pr-2">
-          <span class="font-bold">{{ user.f_name }} {{ user.l_name }}<br></span>
-          <span class="text-xs has-text-accent cursor-pointer" @click="logout">Log out</span>
+          <span class="font-bold"
+            >{{ user.f_name }} {{ user.l_name }}<br
+          /></span>
+          <span class="text-xs has-text-accent cursor-pointer" @click="logout"
+            >Log out</span
+          >
         </p>
-        <img class="rounded-full h-12 w-12 object-cover" :src="user.profile_image" style="max-height: 100%!important;">
+        <img
+          class="rounded-full h-12 w-12 object-cover"
+          :src="user.profile_image"
+          style="max-height: 100%!important;"
+        />
       </b-navbar-item>
     </template>
   </b-navbar>

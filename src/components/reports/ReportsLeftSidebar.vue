@@ -32,7 +32,6 @@
       v-else-if="activeFilter == 'dateTo'"
       @close="activeFilter = null"
     />
-
   </transition>
 </template>
 

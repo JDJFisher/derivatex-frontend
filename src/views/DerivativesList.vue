@@ -1,10 +1,7 @@
 <template>
   <div>
     <div class="mb-4 flex flex-row">
-      <b-button
-        class="w-2/12 mr-4 is-accent"
-        @click="addDerivative"
-      >
+      <b-button class="w-2/12 mr-4 is-accent" @click="addDerivative">
         Add Derivative
       </b-button>
       <b-input
@@ -92,7 +89,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { EventBus } from '@/event-bus.js';
+import { EventBus } from "@/event-bus.js";
 
 import ArrowUp from "vue-material-design-icons/ArrowUp.vue";
 import ArrowDown from "vue-material-design-icons/ArrowDown.vue";
@@ -196,10 +193,10 @@ export default {
   methods: {
     addDerivative() {
       this.$buefy.modal.open({
-          parent: this,
-          component: AddDerivativeModal,
-          hasModalCard: true,
-          trapFocus: true
+        parent: this,
+        component: AddDerivativeModal,
+        hasModalCard: true,
+        trapFocus: true
       });
     },
     tableRowSelect(payload) {
@@ -225,8 +222,9 @@ export default {
       this.loading = true;
       var derivativesLeftToLoad = 0;
 
-      var url = `/derivative-management/index-derivatives?page_number=${(page_number - 1)}&order_key=${this.orderBy.field}`;
-      if (this.orderBy.order == 'descending') {
+      var url = `/derivative-management/index-derivatives?page_number=${page_number -
+        1}&order_key=${this.orderBy.field}`;
+      if (this.orderBy.order == "descending") {
         url += "&reverse_order=true";
       }
       if (this.filters.strikePrice.min) {
@@ -243,9 +241,7 @@ export default {
       }
 
       axios
-        .get(
-          process.env.VUE_APP_API_BASE + url
-        )
+        .get(process.env.VUE_APP_API_BASE + url)
         .then(response => {
           this.derivativeIds = response.data.derivatives;
           derivativesLeftToLoad = response.data.derivatives.length;
@@ -257,7 +253,7 @@ export default {
                   deriativeId
               )
               .then(response => {
-              /* eslint no-console: ["error", { allow: ["log"] }] */
+                /* eslint no-console: ["error", { allow: ["log"] }] */
                 var newDerivative = response.data.derivative;
                 newDerivative.maturity_date = this.$options.filters.formatDate(
                   newDerivative.maturity_date
@@ -285,7 +281,10 @@ export default {
                 if (derivativesLeftToLoad == 0) {
                   this.loading = false;
                   this.derivatives.sort((a, b) => {
-                    return this.derivativeIds.findIndex(x => x == a.id) - this.derivativeIds.findIndex(x => x == b.id);
+                    return (
+                      this.derivativeIds.findIndex(x => x == a.id) -
+                      this.derivativeIds.findIndex(x => x == b.id)
+                    );
                   });
                 }
               });

@@ -49,9 +49,9 @@ export default {
 <style>
 #main-content {
   transition: width 0.3s;
-  padding-bottom: 0!important;
+  padding-bottom: 0 !important;
 }
 #right-sidebar {
-  padding-bottom: 0!important;
+  padding-bottom: 0 !important;
 }
 </style>

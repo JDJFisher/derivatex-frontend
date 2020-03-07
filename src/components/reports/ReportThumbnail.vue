@@ -17,14 +17,20 @@
         <div class="w-1/2 font-bold">
           Status
         </div>
-        <div class="w-1/2 text-right" :class="{'has-text-danger': report.status == 'REDACTED', 'has-text-success': report.status == 'ACTIVE'}">
+        <div
+          class="w-1/2 text-right"
+          :class="{
+            'has-text-danger': report.status == 'REDACTED',
+            'has-text-success': report.status == 'ACTIVE'
+          }"
+        >
           {{ report.status }}
         </div>
       </div>
     </div>
     <footer class="card-footer">
-      <a class="card-footer-item" v-if="!download" @click="download=true">
-        <Download class="mr-2"/>
+      <a class="card-footer-item" v-if="!download" @click="download = true">
+        <Download class="mr-2" />
         Download
       </a>
       <a
@@ -66,7 +72,7 @@ export default {
     FilePdf,
     Download,
     FileFind,
-    FileDelimited,
+    FileDelimited
   },
   props: {
     report: Object
@@ -81,27 +87,29 @@ export default {
     downloadFile(type) {
       axios({
         url: `${process.env.VUE_APP_API_BASE}/reporting/download-report/${type}/${this.report.id}`,
-        method: 'GET',
-        responseType: 'blob'
-      }).then((response) => {
-        const url = window.URL.createObjectURL(new Blob([response.data]));
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', `report-${this.report.id}.${type}`);
-        document.body.appendChild(link);
-        link.click();
-      }).catch(error => {
-        this.$buefy.snackbar.open({
-          message: "Failed to fetch Reports.<br>" + error,
-          type: "is-warning",
-          position: "is-top",
-          actionText: "Retry",
-          indefinite: false,
-          onAction: () => {
-            this.downloadFile(type);
-          }
+        method: "GET",
+        responseType: "blob"
+      })
+        .then(response => {
+          const url = window.URL.createObjectURL(new Blob([response.data]));
+          const link = document.createElement("a");
+          link.href = url;
+          link.setAttribute("download", `report-${this.report.id}.${type}`);
+          document.body.appendChild(link);
+          link.click();
+        })
+        .catch(error => {
+          this.$buefy.snackbar.open({
+            message: "Failed to fetch Reports.<br>" + error,
+            type: "is-warning",
+            position: "is-top",
+            actionText: "Retry",
+            indefinite: false,
+            onAction: () => {
+              this.downloadFile(type);
+            }
+          });
         });
-      });
     }
   }
 };
