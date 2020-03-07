@@ -6,12 +6,18 @@
       </p>
     </div>
     <div class="mb-4">
-      <b-button class="is-accent">
+      <b-button class="is-accent" :disabled="derivative.absolute" @click="editDerivative">
         Edit
       </b-button>
-      <b-button class="is-danger float-right">
+      <b-button class="is-danger float-right" :disabled="derivative.absolute" @click="deleteDerivative">
         Delete
       </b-button>
+      <p class="text-xs text-center italic pt-2" v-if="derivative.absolute && !derivative.deleted">
+        Derivative cannot be edited or deleted - it is absolute.
+      </p>
+      <p class="text-xs text-center italic pt-2 has-text-danger" v-if="derivative.deleted">
+        Derivative has been deleted.
+      </p>
     </div>
     <div>
       <div class="content">
@@ -72,6 +78,9 @@ import Moment from "moment";
 const axios = require("axios");
 import { mapGetters } from "vuex";
 
+import EditDerivativeModal from "@/components/derivatives/EditDerivativeModal";
+import DeleteDerivativeModal from "@/components/derivatives/DeleteDerivativeModal";
+
 export default {
   computed: {
     ...mapGetters({ derivative: "rightSidebarData" })
@@ -88,6 +97,22 @@ export default {
     }
   },
   methods: {
+    editDerivative() {
+      this.$buefy.modal.open({
+        parent: this,
+        component: EditDerivativeModal,
+        hasModalCard: true,
+        trapFocus: true
+      });
+    },
+    deleteDerivative() {
+      this.$buefy.modal.open({
+        parent: this,
+        component: DeleteDerivativeModal,
+        hasModalCard: true,
+        trapFocus: true
+      });
+    },
     refreshActions() {
       this.actions = [];
       this.loadingActions = true;

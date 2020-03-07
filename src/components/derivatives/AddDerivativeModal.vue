@@ -154,7 +154,7 @@
     <footer class="modal-card-foot">
       <div class="w-full h-full">
         <button class="button is-danger" type="button" @click="$parent.close()">
-          Close
+          Cancel
         </button>
         <button
           class="button is-success is-pulled-right"

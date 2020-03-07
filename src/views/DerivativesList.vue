@@ -7,12 +7,12 @@
       <b-input
         v-model="searchString"
         placeholder="Start typing to search..."
-        class="w-5/12 flex-auto mr-4 border-none"
+        class="w-4/12 flex-auto mr-4 border-none"
       />
       <div
-        class="bg-white rounded shadow px-2 py-1 w-3/12 flex-auto flex flex-row"
+        class="bg-white rounded shadow px-2 py-1 w-4/12 flex-auto flex flex-row"
       >
-        <div class="w-1/4 font-bold align-middle" style="padding-top: 0.125rem">
+        <div class="w-1/6 font-bold align-middle" style="padding-top: 0.125rem">
           Order By
         </div>
 
@@ -42,27 +42,70 @@
           </option>
         </b-select>
 
-        <div class="w-1/4 flex flex-row">
-          <ArrowUp
-            class="w-1/2 cursor-pointer"
-            :class="orderBy.order == 'ascending' ? 'accent' : ''"
-            @click="changeOrderByOrder('ascending')"
-          />
-          <ArrowDown
-            class="w-1/2 cursor-pointer"
-            :class="orderBy.order == 'descending' ? 'accent' : ''"
-            @click="changeOrderByOrder('descending')"
-          />
+        <div class="w-1/6 flex flex-row">
+          <div class="w-1/2">
+            <b-tooltip label="Order ascending"
+              position="is-top"
+              animated>
+              <ArrowUp
+                class="w-full cursor-pointer"
+                :class="orderBy.order == 'ascending' ? 'accent' : ''"
+                @click="changeOrderByOrder('ascending')"
+              />
+            </b-tooltip>
+          </div>
+          <div class="w-1/2">
+            <b-tooltip label="Order descending"
+              position="is-top"
+              animated>
+              <ArrowDown
+                class="w-full cursor-pointer"
+                :class="orderBy.order == 'descending' ? 'accent' : ''"
+                @click="changeOrderByOrder('descending')"
+              />
+            </b-tooltip>
+          </div>
+        </div>
+
+        <div class="w-1/6 flex flex-row">
+          <div class="w-1/2">
+            <b-tooltip :label="`${!filters.hideNotDeleted ? 'Hide' : 'Show'} not deleted`"
+              position="is-top"
+              animated>
+              <DeleteOff
+                class="w-full cursor-pointer"
+                :class="!filters.hideNotDeleted ? 'accent' : ''"
+                @click="changeShowDeleted('set_hide_not_deleted_filter', !filters.hideNotDeleted)"
+              />
+            </b-tooltip>
+          </div>
+          <div class="w-1/2">
+            <b-tooltip :label="`${filters.showDeleted ? 'Hide' : 'Show'} deleted`"
+              position="is-top"
+              animated>
+              <Delete
+                class="w-full cursor-pointer"
+                :class="filters.showDeleted ? 'accent' : ''"
+                @click="changeShowDeleted('set_show_deleted_filter', !filters.showDeleted)"
+              />
+            </b-tooltip>
+          </div>
         </div>
       </div>
     </div>
 
     <b-loading :is-full-page="false" :active.sync="loading"></b-loading>
+    <div class="text-lg text-center mt-16" v-if="!loading && derivatives.length == 0">
+      There are no derivatives to show<br>
+      Try changing your filters
+    </div>
     <b-table
       :data="!loading ? derivatives : dummyData"
       :columns="columns"
       :selected.sync="selected"
+      :row-class="(row, index) => row.deleted == 1 ? 'line-through text-gray-500' : ''"
       @select="tableRowSelect($event)"
+      v-if="loading || derivatives.length > 0"
     >
     </b-table>
     <b-pagination
@@ -71,6 +114,7 @@
       :simple="false"
       :per-page="1"
       style="margin-top: 1rem"
+      v-if="loading || derivatives.length > 0"
     >
       <b-pagination-button
         slot="previous"
@@ -91,16 +135,20 @@
 import { mapGetters } from "vuex";
 import { EventBus } from "@/event-bus.js";
 
+import Delete from "vue-material-design-icons/Delete.vue";
 import ArrowUp from "vue-material-design-icons/ArrowUp.vue";
 import ArrowDown from "vue-material-design-icons/ArrowDown.vue";
+import DeleteOff from "vue-material-design-icons/DeleteOff.vue";
 import AddDerivativeModal from "@/components/derivatives/AddDerivativeModal";
 
 const axios = require("axios");
 
 export default {
   components: {
+    Delete,
     ArrowUp,
-    ArrowDown
+    ArrowDown,
+    DeleteOff
   },
   data() {
     return {
@@ -217,6 +265,10 @@ export default {
       });
       this.getDerivatives(this.paginationData.currentPage);
     },
+    changeShowDeleted(mutation, value) {
+      this.$store.dispatch(mutation, value);
+      EventBus.$emit("refreshFilters");
+    },
     getDerivatives(page_number) {
       this.derivatives = [];
       this.loading = true;
@@ -241,19 +293,28 @@ export default {
       }
       this.filters.buyingParty.map(buying_party => {
         url += `&buyers=${buying_party.value}`;
-      })
+      });
       this.filters.sellingParty.map(selling_party => {
         url += `&sellers=${selling_party.value}`;
-      })
+      });
       this.filters.asset.map(asset => {
         url += `&assets=${asset}`;
-      })
+      });
+      if (this.filters.showDeleted) {
+        url += `&show_deleted=true`;
+      }
+      if (this.filters.hideNotDeleted) {
+        url += `&hide_not_deleted=true`;
+      }
 
       axios
         .get(process.env.VUE_APP_API_BASE + url)
         .then(response => {
           this.derivativeIds = response.data.derivatives;
           derivativesLeftToLoad = response.data.derivatives.length;
+          if (derivativesLeftToLoad == 0) {
+            this.loading = false;
+          }
           response.data.derivatives.forEach(deriativeId => {
             axios
               .get(
