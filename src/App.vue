@@ -108,13 +108,13 @@ export default {
   margin-left: 0.7em;
 }
 
-.multiselect__tags {
-  height: 37px !important;
-  min-height: 37px !important;
+.ms-thin .multiselect__tags {
+  height: 36px !important;
+  min-height: 36px !important;
   padding: 4px 40px 0 8px !important;
 }
 
-.multiselect__select {
+.ma-thin .multiselect__select {
   height: 36px !important;
 }
 </style>

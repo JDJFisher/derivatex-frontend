@@ -3,7 +3,7 @@
     <header class="modal-card-head has-background-primary">
       <p class="modal-card-title has-text-white">Add Derivative</p>
     </header>
-    <section class="modal-card-body">
+    <section class="modal-card-body ms-thin">
       <b-field
         label="Code"
         class="pb-2"
