@@ -69,9 +69,14 @@
               <b
                 ><i>{{ action.user.f_name }} {{ action.user.l_name }}</i></b
               ><br />
-              <span class="text-xs">{{ action.timestamp | formatDateTime }}<br /></span>
+              <span class="text-xs"
+                >{{ action.timestamp | formatDateTime }}<br
+              /></span>
               <b>{{ action.type | titleCase }}</b>
-              <span class="text-sm ml-1">{{ (action.type == 'UPDATE' ? action.update_log.attribute : '') | titleCase }}</span>
+              <span class="text-sm ml-1">{{
+                (action.type == "UPDATE" ? action.update_log.attribute : "")
+                  | titleCase
+              }}</span>
               <p v-if="action.type == 'UPDATE'">
                 <span class="text-xs">
                   <i

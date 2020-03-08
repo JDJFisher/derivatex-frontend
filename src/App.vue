@@ -110,7 +110,12 @@ export default {
 
 .v-timeline::before {
   margin-left: 0.7em;
-  background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0))!important;
+  background: linear-gradient(
+    rgba(0, 0, 0, 0),
+    rgba(0, 0, 0, 0.12),
+    rgba(0, 0, 0, 0.12),
+    rgba(0, 0, 0, 0)
+  ) !important;
 }
 
 .ms-thin .multiselect__tags {

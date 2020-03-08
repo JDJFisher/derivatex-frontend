@@ -33,7 +33,8 @@ export default new Vuex.Store({
     user: null,
     companies: [],
     assets: [],
-    currencies: []
+    currencies: [],
+    learnedBehaviour: {}
   },
   mutations: {
     set_page(state, page) {
@@ -65,6 +66,9 @@ export default new Vuex.Store({
     },
     set_currencies(state, currencies) {
       state.currencies = currencies;
+    },
+    set_learned_behaviour(state, learnedBehaviour) {
+      state.learnedBehaviour = learnedBehaviour;
     }
   },
   actions: {
@@ -124,9 +128,15 @@ export default new Vuex.Store({
     },
     set_currencies({ commit }, value) {
       commit("set_currencies", value);
+    },
+    set_learned_behaviour({ commit }, value) {
+      commit("set_learned_behaviour", value);
     }
   },
   getters: {
+    learnedBehaviour: state => {
+      return state.learnedBehaviour;
+    },
     companies: state => {
       return state.companies;
     },

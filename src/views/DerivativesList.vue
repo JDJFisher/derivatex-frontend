@@ -120,7 +120,10 @@
       :columns="columns"
       :selected.sync="selected"
       :row-class="
-        (row, index) => (row.deleted == 1 ? 'line-through text-gray-500 deriv-row' : 'deriv-row')
+        (row, index) =>
+          row.deleted == 1
+            ? 'line-through text-gray-500 deriv-row'
+            : 'deriv-row'
       "
       @select="tableRowSelect($event)"
       v-if="loading || derivatives.length > 0"
@@ -247,7 +250,7 @@ export default {
       this.getDerivatives(this.paginationData.currentPage);
     },
     searchString: function() {
-      this.$store.dispatch('set_search_term_filter', this.searchString);
+      this.$store.dispatch("set_search_term_filter", this.searchString);
       EventBus.$emit("refreshFilters");
     }
   },
@@ -255,7 +258,7 @@ export default {
     ...mapGetters(["orderBy", "filters"]),
     dummyData() {
       var dummyDerivative = {
-        id: "─",
+        code: "─",
         buying_party: "──────",
         selling_party: "──────",
         quantity: "──",
@@ -271,14 +274,26 @@ export default {
         .map(() => dummyDerivative);
     },
     highlightedData() {
-      if (!this.searchString) {return this.derivatives;}
-      return this.derivatives.map((derivative) => {
+      if (!this.searchString) {
+        return this.derivatives;
+      }
+      return this.derivatives.map(derivative => {
         var highlighted = { ...derivative };
         var regex = new RegExp(this.searchString, "i");
-        var fields = ['code', 'buying_party', 'selling_party', 'asset', 'date_of_trade', 'maturity_date'];
+        var fields = [
+          "code",
+          "buying_party",
+          "selling_party",
+          "asset",
+          "date_of_trade",
+          "maturity_date"
+        ];
         fields.forEach(property => {
-          highlighted[property] = highlighted[property].replace(regex, "<span class='highlight'>$&</span>")
-        })
+          highlighted[property] = highlighted[property].replace(
+            regex,
+            "<span class='highlight'>$&</span>"
+          );
+        });
         return highlighted;
       });
     }
@@ -441,7 +456,27 @@ export default {
 <style>
 .highlight {
   color: red;
-  font-weight: bold!important;
+  font-weight: bold !important;
+  animation: pulse 2s 1;
+  border-radius: 5px;
+  box-shadow: 0 0 0 0 rgba(255, 0, 0, 1);
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7);
+  }
+
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 10px rgba(255, 0, 0, 0);
+  }
+
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(255, 0, 0, 0);
+  }
 }
 
 select {

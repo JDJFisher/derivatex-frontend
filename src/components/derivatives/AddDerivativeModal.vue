@@ -177,6 +177,8 @@ import { mapGetters } from "vuex";
 
 import Multiselect from "vue-multiselect";
 
+import AddDerivativeErrorModal from "@/components/derivatives/AddDerivativeErrorModal";
+
 export default {
   components: {
     Multiselect
@@ -232,6 +234,12 @@ export default {
       }
       return Object.keys(this.validation).length == 0;
     },
+    checkLearnedBehaviours(derivative) {
+      return axios.post(`${process.env.VUE_APP_API_BASE}/learned-behaviour/verify-derivative`,
+      {
+        derivative: derivative
+      });
+    },
     add() {
       if (this.validate()) {
         var formData = { ...this.formData };
@@ -254,12 +262,27 @@ export default {
               user_id: this.user.id
             }
           )
-          .then(() => {
+          .then((derivativeResponse) => {
             this.$buefy.snackbar.open({
               message: "Derivative added successfully",
               type: "is-success",
               position: "is-top",
               indefinite: false
+            });
+            this.checkLearnedBehaviours(formData).then(response => {
+              if (response.data.result.length != 0) {
+                this.$buefy.modal.open({
+                  parent: this,
+                  component: AddDerivativeErrorModal,
+                  hasModalCard: true,
+                  trapFocus: true,
+                  props: {
+                    derivative: formData,
+                    derivativeId: derivativeResponse.data.id,
+                    errors: response.data.result
+                  }
+                });
+              }
             });
             this.$parent.close();
           })
