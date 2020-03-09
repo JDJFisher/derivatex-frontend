@@ -59,8 +59,8 @@ export default {
       loading: true,
       columns: [
         {
-          field: "id",
-          label: "ID",
+          field: "code",
+          label: "Code",
           width: "40"
         },
         {
