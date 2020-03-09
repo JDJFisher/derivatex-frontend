@@ -34,18 +34,6 @@
         </div>
       </b-navbar-item>
       <b-navbar-item
-        :active="page == 'export'"
-        @click="$store.dispatch('set_page', 'export')"
-      >
-        <div
-          class="mx-6 w-full flex flex-row"
-          :class="{ 'has-text-grey-light': page != 'export' }"
-        >
-          EXPORT
-          <chevron-down />
-        </div>
-      </b-navbar-item>
-      <b-navbar-item
         :active="page == 'error_detection'"
         @click="$store.dispatch('set_page', 'error_detection')"
       >

@@ -6,7 +6,7 @@
       {{ flags ? 'Reload Flags' : 'Load Flags' }}
     </b-button>
 
-    <b-button class="is-success mb-4 is-pulled-right" @click="changeSelected" :disabled="checkedRows.length == 0">
+    <b-button class="is-success mb-4 is-pulled-right" @click="changeSelected" :disabled="checkedRows.length == 0" v-if="node.suggested_value">
       Apply changes
     </b-button>
 
@@ -35,6 +35,8 @@
 const axios = require("axios");
 import Moment from "moment";
 import { EventBus } from "@/event-bus.js";
+
+import EditDerivativeModal from "@/components/derivatives/EditDerivativeModal"
 
 export default {
   props: {
@@ -89,13 +91,32 @@ export default {
       return this.flags.map(flag => {
         var result = {...flag.derivative};
         result.oldValue = result[this.node.suggested_feature];
-        result[this.node.suggested_feature] = `<span class="line-through has-text-danger">${result[this.node.suggested_feature]}</span><br><span class="font-bold has-text-success">${this.node.suggested_value}</span>`
+        result[this.node.suggested_feature] = `<span class="line-through has-text-danger">${result[this.node.suggested_feature]}</span>`
+        if (this.node.suggested_value) {
+          result[this.node.suggested_feature] += `<br><span class="font-bold has-text-success">${this.node.suggested_value}</span>`
+        }
         return result;
       });
     }
   },
-  mounted() {
-
+  watch: {
+    checkedRows: function() {
+      if (this.node.suggested_value == null && this.checkedRows.length > 0) {
+        var derivativeData = {...this.checkedRows[0]};
+        derivativeData[this.node.suggested_feature] = derivativeData.oldValue;
+        derivativeData.strike_price_orig = derivativeData.strike_price;
+        derivativeData.date_of_trade_orig = derivativeData.date_of_trade;
+        derivativeData.maturity_date_orig = derivativeData.maturity_date;
+        this.$store.dispatch('set_right_sidebar_data', derivativeData);
+        this.$buefy.modal.open({
+          parent: this,
+          component: EditDerivativeModal,
+          hasModalCard: true,
+          trapFocus: true
+        });
+        this.checkedRows = [];
+      }
+    }
   },
   methods: {
     refresh() {

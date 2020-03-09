@@ -6,12 +6,13 @@
     <section class="modal-card-body ms-thin">
       <div class="flex flex-row h-full">
         <div class="w-1/2 p-4 h-full flex flex-col">
-          <div class="" style="height: 50%;">
+          <div class="" style="height: 65%;">
             <div class="box h-full">
               <h1 class="title is-5">Decision Tree</h1>
               <RootNodeDisplay
                 :node="learnedBehaviour"
-                style="margin-top:-0.7rem;"
+                class="overflow-auto"
+                style="margin-top:-1.4rem; height: 95%; margin-left:-1rem; margin-right: -1rem;"
               />
             </div>
           </div>
@@ -64,7 +65,7 @@
                 <div class="level-item has-text-centered">
                   <div>
                     <p class="heading">Automated</p>
-                    <b-switch v-model="newAutomated" :disabled="!learnedBehaviour.approved" class="pt-2"></b-switch>
+                    <b-switch v-model="newAutomated" :disabled="!learnedBehaviour.suggested_value || !learnedBehaviour.approved" class="pt-2"></b-switch>
                   </div>
                 </div>
                 <div class="level-item has-text-centered">
@@ -99,7 +100,8 @@
           <div class="box" style="height: 50%;">
             <h1 class="title is-5">Flags</h1>
             <Flags
-              class="w-full h-full"
+              class="w-full h-full overflow-auto"
+              style="height: 90%;"
               :node="learnedBehaviour"
             />
           </div>
