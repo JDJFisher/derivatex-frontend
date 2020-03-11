@@ -13,7 +13,7 @@
         :type="validation['code'] ? 'is-danger' : ''"
         :message="validation['code'] ? validation['code'] : ''"
       >
-        <b-input v-model="formData.code" placeholder="ABC-123"></b-input>
+        <span v-html="formData.code"><b-input v-model="formData.code" placeholder="ABC-123"></b-input></span>
       </b-field>
 
       <b-field grouped>

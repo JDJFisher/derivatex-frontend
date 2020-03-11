@@ -6,13 +6,13 @@
     <section class="modal-card-body">
       <p class="text-lg has-text-danger">
         You are about to <b>delete</b> the derivative
-        <b>{{ rightSidebarData.code }}</b
+        <b><span v-html="rightSidebarData.code">{{ rightSidebarData.code }}</span></b
         >.
       </p>
       <br />
       <p>
         To confirm this action, please type the derivative code,
-        {{ rightSidebarData.code }} into the box below.
+        <span v-html="rightSidebarData.code">{{ rightSidebarData.code }}</span> into the box below.
       </p>
       <br />
       <b-field class="pb-2">
