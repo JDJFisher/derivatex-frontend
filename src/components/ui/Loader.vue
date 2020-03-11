@@ -38,19 +38,37 @@
       :style="{
         opacity: loginOpacity
       }"
-      id="login">
-      <b-field label="Username" custom-class="has-text-accent" :type="message != '' ? 'is-danger' : ''">
-          <b-input v-model="username" placeholder="Enter your Username" maxlength="30"></b-input>
+      id="login"
+    >
+      <b-field
+        label="Username"
+        custom-class="has-text-accent"
+        :type="message != '' ? 'is-danger' : ''"
+      >
+        <b-input
+          v-model="username"
+          placeholder="Enter your Username"
+          maxlength="30"
+        ></b-input>
       </b-field>
 
-      <b-field label="Password"
-          custom-class="has-text-accent"
-          :type="message != '' ? 'is-danger' : ''"
-          :message="message">
-          <b-input v-model="password" type="password" placeholder="Enter your Password" maxlength="30"></b-input>
+      <b-field
+        label="Password"
+        custom-class="has-text-accent"
+        :type="message != '' ? 'is-danger' : ''"
+        :message="message"
+      >
+        <b-input
+          v-model="password"
+          type="password"
+          placeholder="Enter your Password"
+          maxlength="30"
+        ></b-input>
       </b-field>
 
-      <b-button @click="authenticateUser" class="is-pulled-right is-accent">Log In</b-button>
+      <b-button @click="authenticateUser" class="is-pulled-right is-accent"
+        >Log In</b-button
+      >
     </div>
   </div>
 </template>
@@ -75,7 +93,6 @@ export default {
     };
   },
   mounted() {
-    this.$emit("finish");
     this.borderWidth = "8px";
     setTimeout(
       function() {
@@ -122,14 +139,16 @@ export default {
         .post(
           `${process.env.VUE_APP_API_BASE}/user-account-control/authenticate-user`,
           {
-            "username": this.username,
-            "password": this.password
+            username: this.username,
+            password: this.password
           }
         )
-        .then(() => {
+        .then(response => {
+          this.$store.dispatch("set_user", response.data.user);
           this.$emit("finish");
-        }).catch(() => {
-          this.message = "Incorrect credentials"
+        })
+        .catch(() => {
+          this.message = "Incorrect credentials";
         });
     }
   }

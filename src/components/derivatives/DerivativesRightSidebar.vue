@@ -1,18 +1,45 @@
 <template>
   <div class="p-4 w-full flex flex-col">
-    <div>
+    <div class="mb-4">
       <p class="subtitle is-5 pt-4 has-text-accent">
-        Derivative: {{ derivative.id }}
+        Derivative: {{ derivative.code }}
       </p>
+    </div>
+    <div class="mb-4">
+      <b-button
+        class="is-accent"
+        :disabled="derivative.absolute"
+        @click="editDerivative"
+      >
+        Edit
+      </b-button>
+      <b-button
+        class="is-danger float-right"
+        :disabled="derivative.absolute"
+        @click="deleteDerivative"
+      >
+        Delete
+      </b-button>
+      <p
+        class="text-xs text-center italic pt-2"
+        v-if="derivative.absolute && !derivative.deleted"
+      >
+        Derivative cannot be edited or deleted - it is absolute.
+      </p>
+      <p
+        class="text-xs text-center italic pt-2 has-text-danger"
+        v-if="derivative.deleted"
+      >
+        Derivative has been deleted.
+      </p>
+    </div>
+    <div>
       <div class="content">
         <b>Asset</b>: {{ derivative.asset }}<br />
-        <hr />
         <b>Buying Party</b>: {{ derivative.buying_party }}<br />
         <b>Selling Party</b>: {{ derivative.selling_party }}<br />
-        <hr />
         <b>Trade Date</b>: {{ derivative.date_of_trade }}<br />
         <b>Maturity Date</b>: {{ derivative.maturity_date }}<br />
-        <hr />
         <b>Quantity</b>: {{ derivative.quantity }}<br />
         <b>Strike Price</b>: {{ derivative.strike_price }}<br />
         <b>Underlying Price</b>: {{ derivative.underlying_price }}<br />
@@ -24,117 +51,40 @@
       <p class="subtitle is-5 pt-4 has-text-accent">
         Activity
       </p>
-      <div class="content overflow-scroll hidden">
-        <v-timeline :dense="$vuetify.breakpoint.smAndDown">
-          <v-timeline-item color="purple lighten-2" fill-dot right>
-            <v-card>
-              <v-card-title class="purple lighten-2">
-                <v-icon dark size="42" class="mr-4">
-                  mdi-magnify
-                </v-icon>
-                <h2 class="display-1 white--text font-weight-light">Title 1</h2>
-              </v-card-title>
-              <v-container>
-                <v-row>
-                  <v-col cols="12" md="10">
-                    Lorem ipsum dolor sit amet, no nam oblique veritus. Commune
-                    scaevola imperdiet nec ut, sed euismod convenire principes
-                    at. Est et nobis iisque percipit.
-                  </v-col>
-                  <v-col class="hidden-sm-and-down text-right" md="2">
-                    <v-icon size="64">mdi-calendar-text</v-icon>
-                  </v-col>
-                </v-row>
-              </v-container>
-            </v-card>
-          </v-timeline-item>
-
-          <v-timeline-item color="amber lighten-1" fill-dot left small>
-            <v-card>
-              <v-card-title class="amber lighten-1 justify-end">
-                <h2 class="display-1 mr-4 white--text font-weight-light">
-                  Title 2
-                </h2>
-                <v-icon dark size="42">mdi-home-outline</v-icon>
-              </v-card-title>
-              <v-container>
-                <v-row>
-                  <v-col cols="12" md="8">
-                    Lorem ipsum dolor sit amet, no nam oblique veritus. Commune
-                    scaevola imperdiet nec ut, sed euismod convenire principes
-                    at. Est et nobis iisque percipit.
-                  </v-col>
-                  <v-col cols="12" md="4">
-                    Lorem ipsum dolor sit amet, no nam oblique veritus.
-                  </v-col>
-                </v-row>
-              </v-container>
-            </v-card>
-          </v-timeline-item>
-
-          <v-timeline-item color="cyan lighten-1" fill-dot right>
-            <v-card>
-              <v-card-title class="cyan lighten-1">
-                <v-icon class="mr-4" dark size="42">
-                  mdi-email-outline
-                </v-icon>
-                <h2 class="display-1 white--text font-weight-light">Title 3</h2>
-              </v-card-title>
-              <v-container>
-                <v-row>
-                  <v-col v-for="n in 3" :key="n" cols="12" md="4">
-                    Lorem ipsum dolor sit amet, no nam oblique veritus no nam
-                    oblique.
-                  </v-col>
-                </v-row>
-              </v-container>
-            </v-card>
-          </v-timeline-item>
-
-          <v-timeline-item color="red lighten-1" fill-dot left small>
-            <v-card>
-              <v-card-title class="red lighten-1 justify-end">
-                <h2 class="display-1 mr-4 white--text font-weight-light">
-                  Title 4
-                </h2>
-                <v-icon dark size="42">
-                  mdi-account-multiple-outline
-                </v-icon>
-              </v-card-title>
-              <v-container>
-                <v-row>
-                  <v-col class="hidden-sm-and-down" md="2">
-                    <v-icon size="64">mdi-server-network</v-icon>
-                  </v-col>
-                  <v-col cols="12" md="10">
-                    Lorem ipsum dolor sit amet, no nam oblique veritus. Commune
-                    scaevola imperdiet nec ut, sed euismod convenire principes
-                    at. Est et nobis iisque percipit, an vim zril disputando
-                    voluptatibus.
-                  </v-col>
-                </v-row>
-              </v-container>
-            </v-card>
-          </v-timeline-item>
-
-          <v-timeline-item color="green lighten-1" fill-dot right>
-            <v-card>
-              <v-card-title class="green lighten-1">
-                <v-icon class="mr-4" dark size="42">
-                  mdi-phone-in-talk
-                </v-icon>
-                <h2 class="display-1 white--text font-weight-light">Title 5</h2>
-              </v-card-title>
-              <v-container>
-                <v-row>
-                  <v-col>
-                    Lorem ipsum dolor sit amet, no nam oblique veritus. Commune
-                    scaevola imperdiet nec ut, sed euismod convenire principes
-                    at. Est et nobis iisque percipit, an vim zril disputando
-                    voluptatibus, vix an salutandi sententiae.
-                  </v-col>
-                </v-row>
-              </v-container>
+      <div class="">
+        <v-timeline dense>
+          <v-timeline-item
+            fill-dot
+            right
+            small
+            v-for="action in actions"
+            :key="action.id"
+          >
+            <template v-slot:icon>
+              <v-avatar>
+                <img :src="action.user.profile_image" class="object-cover" />
+              </v-avatar>
+            </template>
+            <v-card class="p-2">
+              <b
+                ><i>{{ action.user.f_name }} {{ action.user.l_name }}</i></b
+              ><br />
+              <span class="text-xs"
+                >{{ action.timestamp | formatDateTime }}<br
+              /></span>
+              <b>{{ action.type | titleCase }}</b>
+              <span class="text-sm ml-1">{{
+                (action.type == "UPDATE" ? action.update_log.attribute : "")
+                  | titleCase
+              }}</span>
+              <p v-if="action.type == 'UPDATE'">
+                <span class="text-xs">
+                  <i
+                    >{{ action.update_log.old_value }} →
+                    {{ action.update_log.new_value }}</i
+                  >
+                </span>
+              </p>
             </v-card>
           </v-timeline-item>
         </v-timeline>
@@ -144,11 +94,76 @@
 </template>
 
 <script>
+import Moment from "moment";
+const axios = require("axios");
 import { mapGetters } from "vuex";
+
+import EditDerivativeModal from "@/components/derivatives/EditDerivativeModal";
+import DeleteDerivativeModal from "@/components/derivatives/DeleteDerivativeModal";
 
 export default {
   computed: {
     ...mapGetters({ derivative: "rightSidebarData" })
+  },
+  data() {
+    return {
+      actions: [],
+      loadingActions: false
+    };
+  },
+  watch: {
+    "derivative.associated_actions": function() {
+      this.refreshActions();
+    }
+  },
+  methods: {
+    editDerivative() {
+      this.$buefy.modal.open({
+        parent: this,
+        component: EditDerivativeModal,
+        hasModalCard: true,
+        trapFocus: true
+      });
+    },
+    deleteDerivative() {
+      this.$buefy.modal.open({
+        parent: this,
+        component: DeleteDerivativeModal,
+        hasModalCard: true,
+        trapFocus: true
+      });
+    },
+    refreshActions() {
+      this.actions = [];
+      this.loadingActions = true;
+      var actionsToLoad = this.derivative.associated_actions.length;
+      this.derivative.associated_actions.forEach(actionId => {
+        axios
+          .get(
+            `${process.env.VUE_APP_API_BASE}/action-management/get-action/${actionId}`
+          )
+          .then(response => {
+            axios
+              .get(
+                `${process.env.VUE_APP_API_BASE}/user-account-control/get-user/${response.data.action.user_id}`
+              )
+              .then(userResponse => {
+                actionsToLoad -= 1;
+                response.data.action.user = userResponse.data.user;
+                this.actions.push(response.data.action);
+                if (actionsToLoad == 0) {
+                  this.loading = false;
+                  this.actions.sort((a, b) => {
+                    return Moment(b.timestamp).diff(Moment(a.timestamp));
+                  });
+                }
+              });
+          });
+      });
+    }
+  },
+  mounted() {
+    this.refreshActions();
   }
 };
 </script>

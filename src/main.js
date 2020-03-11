@@ -13,6 +13,19 @@ Vue.filter("formatDate", function(value) {
   return Moment(value).format("Do MMM YYYY");
 });
 
+Vue.filter("titleCase", function(str) {
+  str = str.replace(/_/g, " ");
+  str = str.toLowerCase().split(" ");
+  for (var i = 0; i < str.length; i++) {
+    str[i] = str[i].charAt(0).toUpperCase() + str[i].slice(1);
+  }
+  return str.join(" ");
+});
+
+Vue.filter("formatDateTime", function(value) {
+  return Moment(value).format("Do MMM YYYY HH:mm");
+});
+
 Vue.filter("formatDateShort", function(value) {
   return Moment(value).format("DD/MM/YYYY");
 });
@@ -32,8 +45,6 @@ Vue.filter("formatCurrency", function(value, symbol, currency) {
     return value.toFixed(2) + " " + currency;
   }
 });
-
-export const eventBus = new Vue();
 
 new Vue({
   router,

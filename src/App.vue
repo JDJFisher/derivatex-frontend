@@ -4,7 +4,10 @@
       <Loader v-if="showLoader" @finish="showLoader = false" />
     </transition>
     <Header style="position: fixed;" class="w-full" />
-    <div class="flex-grow flex flex-row" style="background-color: #F0F0F0; margin-top: 4rem;">
+    <div
+      class="flex-grow flex flex-row"
+      style="background-color: #F0F0F0; margin-top: 4rem;"
+    >
       <LeftSidebar class="relative z-20" style="position: fixed;" />
       <PageContent class="relative z-10" />
     </div>
@@ -12,6 +15,8 @@
 </template>
 
 <script>
+const axios = require("axios");
+
 import Header from "@/components/ui/Header";
 import Loader from "@/components/ui/Loader";
 import PageContent from "@/components/ui/PageContent";
@@ -28,14 +33,99 @@ export default {
     return {
       showLoader: true
     };
+  },
+  mounted() {
+    axios
+      .get(`${process.env.VUE_APP_API_BASE}/external/index-companies`)
+      .then(response => {
+        var result = response.data.companies.map(company => {
+          return {
+            value: company.id,
+            label: `${company.name} (${company.id})`
+          };
+        });
+        this.$store.dispatch("set_companies", result);
+      })
+      .catch(error => {
+        this.$buefy.snackbar.open({
+          message: "Failed to fetch companies.<br>" + error.response.data,
+          type: "is-warning",
+          position: "is-top",
+          indefinite: false
+        });
+      });
+    axios
+      .get(`${process.env.VUE_APP_API_BASE}/external/index-assets`)
+      .then(response => {
+        this.$store.dispatch("set_assets", response.data.assets);
+      })
+      .catch(error => {
+        this.$buefy.snackbar.open({
+          message: "Failed to fetch assets.<br>" + error.response.data,
+          type: "is-warning",
+          position: "is-top",
+          indefinite: false
+        });
+      });
+    axios
+      .get(`${process.env.VUE_APP_API_BASE}/external/index-currencies`)
+      .then(response => {
+        var result = response.data.currencies.map(currency => {
+          return {
+            value: currency.code,
+            symbol: currency.symbol,
+            label: `${currency.code} (${currency.symbol})`
+          };
+        });
+        this.$store.dispatch("set_currencies", result);
+      })
+      .catch(error => {
+        this.$buefy.snackbar.open({
+          message: "Failed to fetch currencies.<br>" + error.response.data,
+          type: "is-warning",
+          position: "is-top",
+          indefinite: false
+        });
+      });
   }
 };
 </script>
 
 <style>
-html,
-body {
-  aoverflow: hidden !important;
+.v-timeline-item__body {
+  max-width: initial !important;
+  margin-left: 1rem;
+}
+.v-timeline-item__divider {
+  min-width: initial !important;
+}
+
+.v-card::before {
+  display: none;
+}
+
+.v-card::after {
+  display: none;
+}
+
+.v-timeline::before {
+  margin-left: 0.7em;
+  background: linear-gradient(
+    rgba(0, 0, 0, 0),
+    rgba(0, 0, 0, 0.12),
+    rgba(0, 0, 0, 0.12),
+    rgba(0, 0, 0, 0)
+  ) !important;
+}
+
+.ms-thin .multiselect__tags {
+  height: 36px !important;
+  min-height: 36px !important;
+  padding: 4px 40px 0 8px !important;
+}
+
+.ma-thin .multiselect__select {
+  height: 36px !important;
 }
 </style>
 

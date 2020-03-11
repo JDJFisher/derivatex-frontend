@@ -2,18 +2,28 @@
   <div>
     {{ filterString }}
     <multiselect
-      v-if="type == 'multiselect'"
+      v-if="type == 'multiselect' && !multiselectObject"
       class="mt-4"
       :options="options"
       :multiple="true"
       :close-on-select="false"
       v-model="newValue"
     />
+    <multiselect
+      v-if="type == 'multiselect' && multiselectObject"
+      class="mt-4"
+      :options="options"
+      :multiple="true"
+      :close-on-select="false"
+      v-model="newValue"
+      :track-by="multiselectTrackBy"
+      :label="multiselectLabel"
+    />
     <datepicker
-        class="text-black"
-        v-if="type == 'date'"
-        v-model="newDate"
-        name="datePicker"
+      class="text-black"
+      v-if="type == 'date'"
+      v-model="newDate"
+      name="datePicker"
     />
     <div v-if="type == 'range'" class="flex flex-row w-full mt-4">
       <div class="flex-auto">
@@ -40,7 +50,7 @@
     </div>
     <a class="button is-danger mt-4" @click="remove">
       <TrashCan />
-      {{ type == 'date' ? "Reset" : "Remove" }}
+      {{ type == "date" ? "Reset" : "Remove" }}
     </a>
     <a class="button is-accent float-right mt-4" @click="apply">
       <Check />
@@ -51,9 +61,10 @@
 
 <script>
 import Moment from "moment";
+import { EventBus } from "@/event-bus.js";
 
 import VueNumeric from "vue-numeric";
-import Datepicker from 'vuejs-datepicker';
+import Datepicker from "vuejs-datepicker";
 import Multiselect from "vue-multiselect";
 import Check from "vue-material-design-icons/Check.vue";
 import TrashCan from "vue-material-design-icons/TrashCan.vue";
@@ -71,7 +82,10 @@ export default {
     initialValue: { required: true },
     mutation: String,
     options: Array,
-    type: String
+    type: String,
+    multiselectObject: Boolean,
+    multiselectTrackBy: String,
+    multiselectLabel: String
   },
   mounted() {
     if (this.type == "multiselect") {
@@ -105,6 +119,7 @@ export default {
         newVal = Moment(this.newDate);
       }
       this.$store.dispatch(this.mutation, newVal);
+      EventBus.$emit("refreshFilters");
       this.$emit("close");
     },
     remove() {
@@ -121,6 +136,7 @@ export default {
         newVal = Moment();
       }
       this.$store.dispatch(this.mutation, newVal);
+      EventBus.$emit("refreshFilters");
       this.$emit("close");
     }
   }

@@ -1,10 +1,10 @@
 <template>
   <div class="w-full h-full ml-64">
     <PageHeader class="relative z-10" />
-    <div class="columns h-full">
+    <div class="columns">
       <div
         id="main-content"
-        class="column overflow-auto"
+        class="column overflow-hidden"
         :class="rightSidebarShow ? 'is-10' : 'is-12'"
       >
         <transition name="header-fade" mode="out-in">
@@ -14,8 +14,8 @@
           <ReportsList class="m-8" v-if="page == 'reports'" />
         </transition>
       </div>
-      <div class="column is-2">
-        <RightSidebar />
+      <div id="right-sidebar" class="column is-2">
+        <RightSidebar class="h-full" />
       </div>
     </div>
   </div>
@@ -49,5 +49,9 @@ export default {
 <style>
 #main-content {
   transition: width 0.3s;
+  padding-bottom: 0 !important;
+}
+#right-sidebar {
+  padding-bottom: 0 !important;
 }
 </style>

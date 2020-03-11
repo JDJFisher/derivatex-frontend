@@ -15,14 +15,26 @@ export default new Vuex.Store({
       asset: [],
       strikePrice: { min: null, max: null },
       notionalValue: { in: null, max: null },
-      dateFrom: Moment().startOf('week').subtract(1, 'week'),
-      dateTo: Moment().endOf('week').subtract(1, 'week')
+      dateFrom: Moment()
+        .startOf("week")
+        .subtract(1, "week"),
+      dateTo: Moment()
+        .endOf("week")
+        .subtract(1, "week"),
+      showDeleted: false,
+      hideNotDeleted: false,
+      searchTerm: ""
     },
     orderBy: {
       field: "date_of_trade",
-      order: "descending"
+      order: "ascending"
     },
-    report: null
+    report: null,
+    user: null,
+    companies: [],
+    assets: [],
+    currencies: [],
+    learnedBehaviour: {}
   },
   mutations: {
     set_page(state, page) {
@@ -42,6 +54,21 @@ export default new Vuex.Store({
     },
     set_report(state, report) {
       state.report = report;
+    },
+    set_user(state, user) {
+      state.user = user;
+    },
+    set_companies(state, companies) {
+      state.companies = companies;
+    },
+    set_assets(state, assets) {
+      state.assets = assets;
+    },
+    set_currencies(state, currencies) {
+      state.currencies = currencies;
+    },
+    set_learned_behaviour(state, learnedBehaviour) {
+      state.learnedBehaviour = learnedBehaviour;
     }
   },
   actions: {
@@ -72,6 +99,15 @@ export default new Vuex.Store({
     set_date_to_filter({ commit }, value) {
       commit("set_filter", { filter: "dateTo", value: value });
     },
+    set_show_deleted_filter({ commit }, value) {
+      commit("set_filter", { filter: "showDeleted", value: value });
+    },
+    set_hide_not_deleted_filter({ commit }, value) {
+      commit("set_filter", { filter: "hideNotDeleted", value: value });
+    },
+    set_search_term_filter({ commit }, value) {
+      commit("set_filter", { filter: "searchTerm", value: value });
+    },
     set_order_by({ commit }, value) {
       commit("set_order_by", value);
     },
@@ -80,9 +116,39 @@ export default new Vuex.Store({
     },
     set_report({ commit }, value) {
       commit("set_report", value);
+    },
+    set_user({ commit }, value) {
+      commit("set_user", value);
+    },
+    set_companies({ commit }, value) {
+      commit("set_companies", value);
+    },
+    set_assets({ commit }, value) {
+      commit("set_assets", value);
+    },
+    set_currencies({ commit }, value) {
+      commit("set_currencies", value);
+    },
+    set_learned_behaviour({ commit }, value) {
+      commit("set_learned_behaviour", value);
     }
   },
   getters: {
+    learnedBehaviour: state => {
+      return state.learnedBehaviour;
+    },
+    companies: state => {
+      return state.companies;
+    },
+    assets: state => {
+      return state.assets;
+    },
+    currencies: state => {
+      return state.currencies;
+    },
+    user: state => {
+      return state.user;
+    },
     page: state => {
       return state.page;
     },
