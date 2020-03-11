@@ -2,7 +2,7 @@
   <div class="p-4 w-full flex flex-col">
     <div class="mb-4">
       <p class="subtitle is-5 pt-4 has-text-accent">
-        Derivative: {{ derivative.code }}
+        Derivative: <span v-html="derivative.code">{{ derivative.code }}</span>
       </p>
     </div>
     <div class="mb-4">
