@@ -80,8 +80,8 @@ export default {
   data() {
     return {
       message: "",
-      username: "",
-      password: "",
+      username: "joe.bloggs@gmail.com",
+      password: "password123",
       skewValue: "skew(0deg)",
       opacityValue: 1,
       borderWidth: 0,
@@ -93,6 +93,9 @@ export default {
     };
   },
   mounted() {
+    this.username = "joe.bloggs@gmail.com";
+    this.password = "password123";
+    this.authenticateUser();
     this.borderWidth = "8px";
     setTimeout(
       function() {
