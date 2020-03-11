@@ -6,10 +6,10 @@
       <div class="fixed">
         <img
           class="w-3/4"
-          v-if="showImage"
           src="@/assets/images/logo.png"
           :style="{
-            marginTop: imageTopPosition
+            marginTop: imageTopPosition,
+            opacity: showImage ? 1 : 0
           }"
         />
         <div
@@ -85,9 +85,9 @@ export default {
       username: "joe.bloggs@gmail.com",
       password: "123",
       skewValue: "skew(0deg)",
-      opacityValue: 1,
+      opacityValue: 0,
       borderWidth: 0,
-      leftPosition: "40%",
+      leftPosition: "40.5%",
       secondLeft: "-9%",
       showImage: false,
       imageTopPosition: "0px",
@@ -99,13 +99,16 @@ export default {
     setTimeout(
       function() {
         this.skewValue = "skew(-20deg)";
-        this.showImage = true;
+        this.opacityValue = 1;
+        this.leftPosition = "40.5%";
+        this.secondLeft = "-9%";
       }.bind(this),
       500
     );
     setTimeout(
       function() {
         this.leftPosition = "77%";
+        this.showImage = true;
         this.secondLeft = "-47%";
       }.bind(this),
       1000
