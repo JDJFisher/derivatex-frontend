@@ -32,7 +32,7 @@
           class="button is-danger is-pulled-right"
           type="button"
           @click="deleteDerivative"
-          :disabled="code != rightSidebarData.code"
+          :disabled="code != rightSidebarData.code.replace(/(<([^>]+)>)/ig,'')"
         >
           Delete Derivative
         </button>
