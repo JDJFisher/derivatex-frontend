@@ -14,6 +14,7 @@
         />
         <div
           class="parallelogram slide w-1/2 h-full absolute top-0 has-background-primary border-white"
+          style="height: 200px;"
           :style="{
             left: leftPosition,
             transform: skewValue,
@@ -23,6 +24,7 @@
         />
         <div
           class="parallelogram slide w-1/2 h-full absolute top-0 has-background-primary border-white"
+          style="height: 200px;"
           :style="{
             left: secondLeft,
             transform: skewValue,
