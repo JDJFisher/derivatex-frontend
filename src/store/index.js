@@ -2,6 +2,8 @@ import Vue from "vue";
 import Vuex from "vuex";
 import Moment from "moment";
 
+import { EventBus } from "@/event-bus.js";
+
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -39,6 +41,9 @@ export default new Vuex.Store({
   mutations: {
     set_page(state, page) {
       state.page = page;
+      if (state.page == 'derivatives') {
+        EventBus.$emit("refreshFilters");
+      }
     },
     set_right_sidebar_show(state, rightSidebarShow) {
       state.rightSidebarShow = rightSidebarShow;
