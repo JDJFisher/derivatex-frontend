@@ -16,7 +16,7 @@
       </p>
       <br />
       <b-field class="pb-2">
-        <b-input v-model="code" :placeholder="rightSidebarData.code.replace(/(<([^>]+)>)/ig,"")"></b-input>
+        <b-input v-model="code" :placeholder="rightSidebarData.code.replace(/(<([^>]+)>)/ig,'')"></b-input>
       </b-field>
     </section>
     <footer class="modal-card-foot">
