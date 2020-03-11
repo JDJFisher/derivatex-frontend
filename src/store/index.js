@@ -41,10 +41,10 @@ export default new Vuex.Store({
   mutations: {
     set_page(state, page) {
       state.page = page;
+      state.filters.searchTerm = "";
       if (state.page == 'derivatives') {
         EventBus.$emit("refreshFilters");
       }
-      state.filters.searchTerm = "";
     },
     set_right_sidebar_show(state, rightSidebarShow) {
       state.rightSidebarShow = rightSidebarShow;
