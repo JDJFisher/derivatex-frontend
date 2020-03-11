@@ -44,6 +44,7 @@ export default new Vuex.Store({
       if (state.page == 'derivatives') {
         EventBus.$emit("refreshFilters");
       }
+      state.filters.searchTerm = "";
     },
     set_right_sidebar_show(state, rightSidebarShow) {
       state.rightSidebarShow = rightSidebarShow;
