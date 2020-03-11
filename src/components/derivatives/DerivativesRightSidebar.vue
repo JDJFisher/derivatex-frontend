@@ -35,15 +35,15 @@
     </div>
     <div>
       <div class="content">
-        <b>Asset</b>: {{ derivative.asset }}<br />
-        <b>Buying Party</b>: {{ derivative.buying_party }}<br />
-        <b>Selling Party</b>: {{ derivative.selling_party }}<br />
-        <b>Trade Date</b>: {{ derivative.date_of_trade }}<br />
-        <b>Maturity Date</b>: {{ derivative.maturity_date }}<br />
-        <b>Quantity</b>: {{ derivative.quantity }}<br />
-        <b>Strike Price</b>: {{ derivative.strike_price }}<br />
-        <b>Underlying Price</b>: {{ derivative.underlying_price }}<br />
-        <b>Notional Value</b>: {{ derivative.notional_value }}<br />
+        <b>Asset</b>: <span v-html="derivative.asset">{{ derivative.asset }}</span><br />
+        <b>Buying Party</b>: <span v-html="derivative.buying_party"></span><br />
+        <b>Selling Party</b>: <span v-html="derivative.selling_party"></span><br />
+        <b>Trade Date</b>: <span v-html="derivative.date_of_trade"></span><br />
+        <b>Maturity Date</b>: <span v-html="derivative.maturity_date"></span><br />
+        <b>Quantity</b>: <span v-html="derivative.quantity"></span><br />
+        <b>Strike Price</b>: <span v-html="derivative.strike_price"></span><br />
+        <b>Underlying Price</b>: <span v-html="derivative.underlying_price"></span><br />
+        <b>Notional Value</b>: <span v-html="derivative.notional_value"></span><br />
       </div>
       <hr />
     </div>
