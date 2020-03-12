@@ -60,8 +60,7 @@ export default {
       columns: [
         {
           field: "code",
-          label: "Code",
-          width: "40"
+          label: "Code"
         },
         {
           field: "buying_party",
