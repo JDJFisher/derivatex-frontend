@@ -408,6 +408,12 @@ export default {
                   newDerivative.underlying_curr_symbol,
                   newDerivative.underlying_curr_code
                 );
+                newDerivative.maturity_date = this.$options.filters.formatDate(
+                  newDerivative.maturity_date
+                );
+                newDerivative.date_of_trade = this.$options.filters.formatDate(
+                  newDerivative.date_of_trade
+                );
                 newDerivative.notional_value = this.$options.filters.formatCurrency(
                   newDerivative.notional_value,
                   newDerivative.notional_curr_symbol,
