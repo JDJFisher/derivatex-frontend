@@ -14,6 +14,7 @@ Vue.filter("formatDate", function(value) {
 });
 
 Vue.filter("titleCase", function(str) {
+  if (!str) {return "";}
   str = str.replace(/_/g, " ");
   str = str.toLowerCase().split(" ");
   for (var i = 0; i < str.length; i++) {
